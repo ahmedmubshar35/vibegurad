@@ -1,0 +1,1 @@
+import 'package:flutter/material.dart'; class session_list_item extends StatelessWidget { const session_list_item({super.key}); @override Widget build(BuildContext context) { return const Scaffold(body: Center(child: Text('Coming Soon'))); } }

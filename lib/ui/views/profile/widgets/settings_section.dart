@@ -1,0 +1,1 @@
+import 'package:flutter/material.dart'; class settings_section extends StatelessWidget { const settings_section({super.key}); @override Widget build(BuildContext context) { return const Scaffold(body: Center(child: Text('Coming Soon'))); } }

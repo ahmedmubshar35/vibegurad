@@ -1,0 +1,140 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if user owns the document
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return isAuthenticated() && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Helper function to check if user is manager or admin
+    function isManagerOrAdmin() {
+      return isAuthenticated() && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['manager', 'admin'];
+    }
+    
+    // Users collection rules
+    match /users/{userId} {
+      // Allow users to read their own document
+      allow read: if isOwner(userId);
+      
+      // Allow users to create their own document during registration
+      allow create: if isOwner(userId);
+      
+      // Allow users to update their own document
+      allow update: if isOwner(userId);
+      
+      // Only admins can delete user documents
+      allow delete: if isAdmin();
+      
+      // Managers and admins can read all users in their company
+      allow read: if isManagerOrAdmin();
+    }
+    
+    // Companies collection rules
+    match /companies/{companyId} {
+      // Any authenticated user can read company data
+      allow read: if isAuthenticated();
+      
+      // Only admins can create/update/delete companies
+      allow create, update, delete: if isAdmin();
+    }
+    
+    // Workers collection rules
+    match /workers/{workerId} {
+      // Workers can read their own data
+      allow read: if isOwner(workerId);
+      
+      // Workers can update their own data
+      allow update: if isOwner(workerId);
+      
+      // Managers and admins can read/write all workers
+      allow read, write: if isManagerOrAdmin();
+    }
+    
+    // Tools collection rules
+    match /tools/{toolId} {
+      // Any authenticated user can read tools
+      allow read: if isAuthenticated();
+      
+      // Only managers and admins can write tools
+      allow write: if isManagerOrAdmin();
+    }
+    
+    // Sessions collection rules (for timer sessions)
+    match /sessions/{sessionId} {
+      // Users can read their own sessions
+      allow read: if isAuthenticated() && 
+        (resource.data.workerId == request.auth.uid || isManagerOrAdmin());
+      
+      // Users can create their own sessions
+      allow create: if isAuthenticated() && 
+        request.resource.data.workerId == request.auth.uid;
+      
+      // Users can update their own active sessions
+      allow update: if isAuthenticated() && 
+        resource.data.workerId == request.auth.uid;
+      
+      // Managers and admins can read/write all sessions
+      allow read, write: if isManagerOrAdmin();
+    }
+    
+    // Timer sessions collection rules (legacy - keep for compatibility)
+    match /timer_sessions/{sessionId} {
+      // Users can read their own sessions
+      allow read: if isAuthenticated() && 
+        (resource.data.workerId == request.auth.uid || isManagerOrAdmin());
+      
+      // Users can create their own sessions
+      allow create: if isAuthenticated() && 
+        request.resource.data.workerId == request.auth.uid;
+      
+      // Users can update their own active sessions
+      allow update: if isAuthenticated() && 
+        resource.data.workerId == request.auth.uid;
+      
+      // Managers and admins can read/write all sessions
+      allow read, write: if isManagerOrAdmin();
+    }
+    
+    // Exposure records collection rules
+    match /exposure_records/{recordId} {
+      // Users can read their own exposure records
+      allow read: if isAuthenticated() && 
+        (resource.data.workerId == request.auth.uid || isManagerOrAdmin());
+      
+      // System creates exposure records (through authenticated users)
+      allow create: if isAuthenticated() && 
+        request.resource.data.workerId == request.auth.uid;
+      
+      // No updates or deletes allowed for audit trail
+      allow update, delete: if false;
+      
+      // Managers and admins can read all records
+      allow read: if isManagerOrAdmin();
+    }
+    
+    // Reports collection rules
+    match /reports/{reportId} {
+      // Only managers and admins can access reports
+      allow read, write: if isManagerOrAdmin();
+    }
+    
+    // Temporary rule for development - Allow all authenticated users
+    // TODO: Remove this in production and rely on specific collection rules
+    match /{document=**} {
+      allow read, write: if isAuthenticated();
+    }
+  }
+}

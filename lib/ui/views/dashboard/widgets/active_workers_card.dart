@@ -1,0 +1,1 @@
+import 'package:flutter/material.dart'; class active_workers_card extends StatelessWidget { const active_workers_card({super.key}); @override Widget build(BuildContext context) { return const Scaffold(body: Center(child: Text('Coming Soon'))); } }

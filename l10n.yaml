@@ -1,0 +1,10 @@
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+output-dir: lib/l10n/generated
+preferred-supported-locales: [ en ]
+header-comment: |
+  Generated internationalization configuration for VibeGuard.
+  This file contains localized text for the application.
+nullable-getter: false

@@ -1,0 +1,1 @@
+import 'package:flutter/material.dart'; class report_generator extends StatelessWidget { const report_generator({super.key}); @override Widget build(BuildContext context) { return const Scaffold(body: Center(child: Text('Coming Soon'))); } }

@@ -1,0 +1,1 @@
+import 'package:flutter/material.dart'; class safety_alerts_panel extends StatelessWidget { const safety_alerts_panel({super.key}); @override Widget build(BuildContext context) { return const Scaffold(body: Center(child: Text('Coming Soon'))); } }

@@ -1,0 +1,294 @@
+{
+  "@@locale": "en",
+  "@_APP_GENERAL": {
+    "description": "General app strings"
+  },
+  "appTitle": "VibeGuard",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading indicator text"
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Generic error text"
+  },
+  "success": "Success",
+  "@success": {
+    "description": "Generic success text"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Save button text"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "OK button text"
+  },
+  "yes": "Yes",
+  "@yes": {
+    "description": "Yes button text"
+  },
+  "no": "No",
+  "@no": {
+    "description": "No button text"
+  },
+  
+  "@_AUTHENTICATION": {
+    "description": "Authentication related strings"
+  },
+  "login": "Login",
+  "@login": {
+    "description": "Login button text"
+  },
+  "logout": "Logout",
+  "@logout": {
+    "description": "Logout button text"
+  },
+  "register": "Register",
+  "@register": {
+    "description": "Register button text"
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Email field label"
+  },
+  "password": "Password",
+  "@password": {
+    "description": "Password field label"
+  },
+  "firstName": "First Name",
+  "@firstName": {
+    "description": "First name field label"
+  },
+  "lastName": "Last Name",
+  "@lastName": {
+    "description": "Last name field label"
+  },
+  "forgotPassword": "Forgot Password?",
+  "@forgotPassword": {
+    "description": "Forgot password link text"
+  },
+
+  "@_HOME": {
+    "description": "Home screen strings"
+  },
+  "welcome": "Welcome",
+  "@welcome": {
+    "description": "Welcome message"
+  },
+  "goodMorning": "Good morning",
+  "@goodMorning": {
+    "description": "Good morning greeting"
+  },
+  "goodAfternoon": "Good afternoon",
+  "@goodAfternoon": {
+    "description": "Good afternoon greeting"
+  },
+  "goodEvening": "Good evening",
+  "@goodEvening": {
+    "description": "Good evening greeting"
+  },
+  "startToolRecognition": "Start Tool Recognition",
+  "@startToolRecognition": {
+    "description": "Start tool recognition button text"
+  },
+  "todayExposure": "Today's Exposure",
+  "@todayExposure": {
+    "description": "Today's exposure label"
+  },
+  "safetyStatus": "Safety Status",
+  "@safetyStatus": {
+    "description": "Safety status label"
+  },
+
+  "@_TIMER": {
+    "description": "Timer related strings"
+  },
+  "safetyTimer": "Safety Timer",
+  "@safetyTimer": {
+    "description": "Safety timer title"
+  },
+  "startTimer": "Start Timer",
+  "@startTimer": {
+    "description": "Start timer button text"
+  },
+  "stopTimer": "Stop Timer",
+  "@stopTimer": {
+    "description": "Stop timer button text"
+  },
+  "pauseTimer": "Pause Timer",
+  "@pauseTimer": {
+    "description": "Pause timer button text"
+  },
+  "resumeTimer": "Resume Timer",
+  "@resumeTimer": {
+    "description": "Resume timer button text"
+  },
+  "trackVibrationExposure": "Track your vibration exposure",
+  "@trackVibrationExposure": {
+    "description": "Timer subtitle text"
+  },
+
+  "@_SETTINGS": {
+    "description": "Settings screen strings"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings screen title"
+  },
+  "profile": "Profile",
+  "@profile": {
+    "description": "Profile section title"
+  },
+  "notificationSettings": "Notification Settings",
+  "@notificationSettings": {
+    "description": "Notification settings section title"
+  },
+  "allowNotifications": "Allow Notifications",
+  "@allowNotifications": {
+    "description": "Allow notifications setting"
+  },
+  "safetyAlerts": "Safety Alerts",
+  "@safetyAlerts": {
+    "description": "Safety alerts setting"
+  },
+  "breakReminders": "Break Reminders",
+  "@breakReminders": {
+    "description": "Break reminders setting"
+  },
+  "dailyReports": "Daily Reports",
+  "@dailyReports": {
+    "description": "Daily reports setting"
+  },
+  "safetySettings": "Safety Settings",
+  "@safetySettings": {
+    "description": "Safety settings section title"
+  },
+  "appSettings": "App Settings",
+  "@appSettings": {
+    "description": "App settings section title"
+  },
+  "theme": "Theme",
+  "@theme": {
+    "description": "Theme setting label"
+  },
+  "lightMode": "Light",
+  "@lightMode": {
+    "description": "Light mode theme name"
+  },
+  "darkMode": "Dark",
+  "@darkMode": {
+    "description": "Dark mode theme name"
+  },
+  "systemMode": "System",
+  "@systemMode": {
+    "description": "System mode theme name"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language setting label"
+  },
+  "dataPrivacy": "Data & Privacy",
+  "@dataPrivacy": {
+    "description": "Data and privacy section title"
+  },
+  "aboutSupport": "About & Support",
+  "@aboutSupport": {
+    "description": "About and support section title"
+  },
+  "signOut": "Sign Out",
+  "@signOut": {
+    "description": "Sign out button text"
+  },
+
+  "@_TOOL_MANAGEMENT": {
+    "description": "Tool management strings"
+  },
+  "toolManagement": "Tool Management",
+  "@toolManagement": {
+    "description": "Tool management title"
+  },
+  "advancedToolManagement": "Advanced Tool Management",
+  "@advancedToolManagement": {
+    "description": "Advanced tool management title"
+  },
+  "toolInventory": "Tool Inventory",
+  "@toolInventory": {
+    "description": "Tool inventory title"
+  },
+  "checkoutTool": "Checkout Tool",
+  "@checkoutTool": {
+    "description": "Checkout tool action"
+  },
+  "checkinTool": "Checkin Tool",
+  "@checkinTool": {
+    "description": "Checkin tool action"
+  },
+  "reserveTool": "Reserve Tool",
+  "@reserveTool": {
+    "description": "Reserve tool action"
+  },
+  "toolCondition": "Tool Condition",
+  "@toolCondition": {
+    "description": "Tool condition title"
+  },
+  "toolPerformance": "Tool Performance",
+  "@toolPerformance": {
+    "description": "Tool performance title"
+  },
+  "toolWarranty": "Tool Warranty",
+  "@toolWarranty": {
+    "description": "Tool warranty title"
+  },
+  "costTracking": "Cost Tracking",
+  "@costTracking": {
+    "description": "Cost tracking title"
+  },
+
+  "@_SAFETY": {
+    "description": "Safety related strings"
+  },
+  "safetyDashboard": "Safety Dashboard",
+  "@safetyDashboard": {
+    "description": "Safety dashboard title"
+  },
+  "exposureLimit": "Exposure Limit",
+  "@exposureLimit": {
+    "description": "Exposure limit label"
+  },
+  "dailyLimit": "Daily Limit",
+  "@dailyLimit": {
+    "description": "Daily limit label"
+  },
+  "weeklyLimit": "Weekly Limit",
+  "@weeklyLimit": {
+    "description": "Weekly limit label"
+  },
+  "takeBreak": "Take a Break",
+  "@takeBreak": {
+    "description": "Take break message"
+  },
+  "withinSafeLimits": "Great job! You're well within safe limits.",
+  "@withinSafeLimits": {
+    "description": "Safe limits message"
+  },
+  "approachingLimit": "Caution: Approaching daily limit.",
+  "@approachingLimit": {
+    "description": "Approaching limit warning"
+  },
+  "nearLimit": "Warning: Near daily exposure limit!",
+  "@nearLimit": {
+    "description": "Near limit warning"
+  },
+  "limitExceeded": "ALERT: Daily limit exceeded! Take a break.",
+  "@limitExceeded": {
+    "description": "Limit exceeded alert"
+  }
+}

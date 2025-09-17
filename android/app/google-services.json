@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "89372462829",
+    "project_id": "vibe-guard-1c07d",
+    "storage_bucket": "vibe-guard-1c07d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89372462829:android:6bdd3a51e1c6d6c56c06e4",
+        "android_client_info": {
+          "package_name": "com.example.vibe_guard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVTXNND3a8mCKeeVRKl6C0RHgfHQ9ETTw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

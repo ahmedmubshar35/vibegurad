@@ -1,0 +1,1 @@
+import 'package:flutter/material.dart'; class camera_preview_widget extends StatelessWidget { const camera_preview_widget({super.key}); @override Widget build(BuildContext context) { return const Scaffold(body: Center(child: Text('Coming Soon'))); } }

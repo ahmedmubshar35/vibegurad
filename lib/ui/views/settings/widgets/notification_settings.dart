@@ -1,0 +1,1 @@
+import 'package:flutter/material.dart'; class notification_settings extends StatelessWidget { const notification_settings({super.key}); @override Widget build(BuildContext context) { return const Scaffold(body: Center(child: Text('Coming Soon'))); } }

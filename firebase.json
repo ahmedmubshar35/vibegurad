@@ -1,0 +1,44 @@
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "vibe-guard-1c07d",
+          "appId": "1:89372462829:android:6bdd3a51e1c6d6c56c06e4",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "vibe-guard-1c07d",
+          "appId": "1:89372462829:ios:804358f433eab7ae6c06e4",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "vibe-guard-1c07d",
+          "appId": "1:89372462829:ios:804358f433eab7ae6c06e4",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "vibe-guard-1c07d",
+          "configurations": {
+            "android": "1:89372462829:android:6bdd3a51e1c6d6c56c06e4",
+            "ios": "1:89372462829:ios:804358f433eab7ae6c06e4",
+            "macos": "1:89372462829:ios:804358f433eab7ae6c06e4",
+            "web": "1:89372462829:web:2ee01e4766acaeb46c06e4",
+            "windows": "1:89372462829:web:7614469d6891950b6c06e4"
+          }
+        }
+      }
+    }
+  }
+}

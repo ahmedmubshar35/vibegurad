@@ -1,0 +1,1 @@
+import 'package:flutter/material.dart'; class tool_recognition_overlay extends StatelessWidget { const tool_recognition_overlay({super.key}); @override Widget build(BuildContext context) { return const Scaffold(body: Center(child: Text('Coming Soon'))); } }

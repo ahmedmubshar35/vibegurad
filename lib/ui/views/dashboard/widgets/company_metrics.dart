@@ -1,0 +1,1 @@
+import 'package:flutter/material.dart'; class company_metrics extends StatelessWidget { const company_metrics({super.key}); @override Widget build(BuildContext context) { return const Scaffold(body: Center(child: Text('Coming Soon'))); } }
