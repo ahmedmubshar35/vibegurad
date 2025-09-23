@@ -16,6 +16,7 @@ import 'notification_service.dart';
 import 'vibration_service.dart';
 import 'exposure_calculation_service.dart';
 import 'background_timer_service.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class TimerService with ListenableServiceMixin {
@@ -26,6 +27,7 @@ class TimerService with ListenableServiceMixin {
   VibrationService get _vibrationService => GetIt.instance<VibrationService>();
   ExposureCalculationService get _exposureService => GetIt.instance<ExposureCalculationService>();
   BackgroundTimerService get _backgroundService => GetIt.instance<BackgroundTimerService>();
+  final NotificationManager _notificationManager = NotificationManager();
 
   TimerService() {
     listenToReactiveValues([
@@ -82,18 +84,18 @@ class TimerService with ListenableServiceMixin {
     
     if (_currentUser == null) {
       print('❌ User not authenticated');
-      _snackbarService.showSnackbar(message: 'User not authenticated.');
+      _notificationManager.showError('User not authenticated.');
       return false;
     }
 
     if (_currentUser!.id == null || _currentUser!.id!.isEmpty) {
       print('❌ User ID is null or empty: ${_currentUser!.id}');
-      _snackbarService.showSnackbar(message: 'User ID is missing. Please log in again.');
+      _notificationManager.showError('User ID is missing. Please log in again.');
       return false;
     }
 
-    if (currentSession != null) {
-      _snackbarService.showSnackbar(message: 'A session is already active.');
+    if (currentSession != null && currentSession!.isActive) {
+      _notificationManager.showError('A session is already active.');
       return false;
     }
 
@@ -126,15 +128,15 @@ class TimerService with ListenableServiceMixin {
       _startTimer();
       _isRunning.value = true;
 
-      _snackbarService.showSnackbar(
-        message: 'Started tracking ${tool.displayName} usage.',
-      );
+      // Show a simple toast to confirm it's working
+      _notificationManager.showSuccess('Timer started for ${tool.displayName}');
 
+      print('✅ Timer session started successfully');
       return true;
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to start session: $e',
-      );
+      print('❌ Error starting timer session: $e');
+      print('🔍 Error details: ${e.toString()}');
+      _notificationManager.showError('Failed to start session: ${e.toString()}');
       return false;
     }
   }
@@ -142,7 +144,7 @@ class TimerService with ListenableServiceMixin {
   // Pause current session
   Future<bool> pauseSession() async {
     if (currentSession == null || !isRunning) {
-      _snackbarService.showSnackbar(message: 'No active session to pause.');
+      // No notification for pause - user can see in UI
       return false;
     }
 
@@ -154,12 +156,10 @@ class TimerService with ListenableServiceMixin {
       _stopTimer();
       _isRunning.value = false;
 
-      _snackbarService.showSnackbar(message: 'Session paused.');
+      // Session paused notification removed - less intrusive
       return true;
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to pause session: $e',
-      );
+      NotificationManager().showError('Failed to pause session: $e');
       return false;
     }
   }
@@ -167,7 +167,7 @@ class TimerService with ListenableServiceMixin {
   // Resume paused session
   Future<bool> resumeSession() async {
     if (currentSession == null || currentSession!.status != TimerStatus.paused) {
-      _snackbarService.showSnackbar(message: 'No paused session to resume.');
+      NotificationManager().showWarning('No paused session to resume.');
       return false;
     }
 
@@ -179,12 +179,10 @@ class TimerService with ListenableServiceMixin {
       _startTimer();
       _isRunning.value = true;
 
-      _snackbarService.showSnackbar(message: 'Session resumed.');
+      // Session resumed notification removed - less intrusive
       return true;
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to resume session: $e',
-      );
+      NotificationManager().showError('Failed to resume session: $e');
       return false;
     }
   }
@@ -192,7 +190,7 @@ class TimerService with ListenableServiceMixin {
   // Stop current session
   Future<bool> stopSession({String? reason}) async {
     if (currentSession == null) {
-      _snackbarService.showSnackbar(message: 'No active session to stop.');
+      NotificationManager().showWarning('No active session to stop.');
       return false;
     }
 
@@ -207,12 +205,10 @@ class TimerService with ListenableServiceMixin {
       // Refresh exposure cache after stopping session
       await _refreshExposureCache();
 
-      _snackbarService.showSnackbar(message: 'Session stopped.');
+      // Session stopped notification removed - less intrusive
       return true;
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to stop session: $e',
-      );
+      NotificationManager().showError('Failed to stop session: $e');
       return false;
     }
   }
@@ -220,7 +216,7 @@ class TimerService with ListenableServiceMixin {
   // Emergency stop session
   Future<bool> emergencyStop(String reason) async {
     if (currentSession == null) {
-      _snackbarService.showSnackbar(message: 'No active session to stop.');
+      NotificationManager().showWarning('No active session to stop.');
       return false;
     }
 
@@ -232,15 +228,10 @@ class TimerService with ListenableServiceMixin {
       _stopTimer();
       _isRunning.value = false;
 
-      _snackbarService.showSnackbar(
-        message: 'EMERGENCY STOP: $reason',
-        duration: const Duration(seconds: 5),
-      );
+      NotificationManager().showError('EMERGENCY STOP: $reason');
       return true;
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to emergency stop: $e',
-      );
+      NotificationManager().showError('Failed to emergency stop: $e');
       return false;
     }
   }
@@ -369,10 +360,7 @@ class TimerService with ListenableServiceMixin {
       level: ExposureLevel.high,
     );
     
-    _snackbarService.showSnackbar(
-      message: '⚠️ $message',
-      duration: const Duration(seconds: 3),
-    );
+    NotificationManager().showWarning('⚠️ $message');
   }
 
   // Trigger critical alert
@@ -392,10 +380,7 @@ class TimerService with ListenableServiceMixin {
       level: ExposureLevel.critical,
     );
     
-    _snackbarService.showSnackbar(
-      message: '🚨 $message',
-      duration: const Duration(seconds: 5),
-    );
+    NotificationManager().showError('🚨 $message');
   }
 
   // Trigger rest reminder
@@ -416,10 +401,7 @@ class TimerService with ListenableServiceMixin {
       );
     }
     
-    _snackbarService.showSnackbar(
-      message: '⏰ Time for a mandatory 15-minute rest break! Timer paused automatically.',
-      duration: const Duration(seconds: 6),
-    );
+    NotificationManager().showWarning('⏰ Time for a mandatory 15-minute rest break! Timer paused automatically.');
   }
 
   // Trigger advanced rest reminder with detailed calculations
@@ -443,10 +425,7 @@ class TimerService with ListenableServiceMixin {
       );
     }
     
-    _snackbarService.showSnackbar(
-      message: '⏰ ${restPeriod.recommendation} (${restPeriod.requiredRestMinutes} min rest)',
-      duration: const Duration(seconds: 8),
-    );
+    NotificationManager().showWarning('⏰ ${restPeriod.recommendation} (${restPeriod.requiredRestMinutes} min rest)');
   }
 
   // Update session in Firestore
@@ -618,9 +597,7 @@ class TimerService with ListenableServiceMixin {
           .toList();
       
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error loading sessions: ${e.toString()}',
-      );
+      NotificationManager().showError('Error loading sessions: ${e.toString()}');
       return [];
     }
   }

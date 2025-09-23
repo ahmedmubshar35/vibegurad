@@ -248,6 +248,29 @@ class DataUsageService with ListenableServiceMixin {
     notifyListeners();
   }
   
+  // Additional getters needed by the view
+  int get dataLimitMB => 1000; // Default 1GB limit
+  double get averageDailyUsage => getDataUsageStatistics().averageDailyUsage;
+  String get peakUsageDay => 'Monday'; // Simplified for now
+  double get dataSavedThisMonth => _isDataSavingMode ? _dataUsageThisMonth * 0.3 : 0.0; // Estimated 30% savings
+  double get wifiUsagePercentage {
+    final stats = getDataUsageStatistics();
+    final total = stats.wifiUsage + stats.mobileUsage;
+    return total > 0 ? (stats.wifiUsage / total) * 100 : 0.0;
+  }
+
+  // Refresh data method
+  Future<void> refreshData() async {
+    await _updateDataUsageMetrics();
+  }
+
+  // Set data limit
+  Future<void> setDataLimit(int limitMB) async {
+    // In a real implementation, this would save to preferences
+    // For now, just notify listeners
+    notifyListeners();
+  }
+
   void dispose() {
     _monitoringTimer?.cancel();
   }

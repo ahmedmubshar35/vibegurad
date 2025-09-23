@@ -13,6 +13,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/tool/tool.dart';
 import '../../models/ai/recognition_result.dart';
+import '../core/notification_manager.dart';
 import '../../models/ai/tool_image_database.dart';
 import '../../enums/tool_type.dart';
 import 'tool_service.dart';
@@ -115,9 +116,7 @@ class AdvancedAIService with ListenableServiceMixin {
       print('✅ Advanced AI Service initialized successfully');
     } catch (e) {
       print('❌ Failed to initialize AI models: $e');
-      _snackbarService.showSnackbar(
-        message: 'AI models initialization failed. Using fallback recognition.',
-      );
+      NotificationManager().showWarning('AI models initialization failed. Using fallback recognition.');
     }
   }
   

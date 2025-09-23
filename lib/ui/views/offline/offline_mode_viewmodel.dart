@@ -2,6 +2,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import '../../../app/app.locator.dart';
 import '../../../services/core/connectivity_service.dart';
+import '../../../services/core/notification_manager.dart';
 
 class OfflineModeViewModel extends BaseViewModel {
   final _connectivityService = locator<ConnectivityService>();
@@ -49,9 +50,7 @@ class OfflineModeViewModel extends BaseViewModel {
   
   Future<void> syncData() async {
     if (!isConnected) {
-      _snackbarService.showSnackbar(
-        message: 'No internet connection available',
-      );
+      NotificationManager().showWarning('No internet connection available');
       return;
     }
     
@@ -67,20 +66,20 @@ class OfflineModeViewModel extends BaseViewModel {
       _lastSyncTime = 'Just now';
       _isSyncing = false;
       
-      _snackbarService.showSnackbar(
-        message: 'Data synced successfully',
-      );
+      NotificationManager().showSuccess('Data synced successfully');
     } catch (e) {
       _isSyncing = false;
-      _snackbarService.showSnackbar(
-        message: 'Sync failed: $e',
-      );
+      NotificationManager().showError('Sync failed: $e');
     } finally {
       setBusy(false);
       notifyListeners();
     }
   }
 }
+
+
+
+
 
 
 

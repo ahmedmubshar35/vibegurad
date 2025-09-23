@@ -6,6 +6,7 @@ import 'dart:io';
 
 import '../../models/tool/advanced_tool_models.dart';
 import '../../config/firebase_config.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class ToolConditionService {
@@ -165,17 +166,13 @@ class ToolConditionService {
       // Update tool inventory condition
       await _updateToolInventoryCondition(toolId, condition);
 
-      _snackbarService.showSnackbar(
-        message: 'Condition report created successfully!',
-      );
+      NotificationManager().showSuccess('Condition report created successfully!');
       
       print('✅ Condition report created: ${report.reportId}');
       return true;
     } catch (e) {
       print('❌ Error creating condition report: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to create condition report: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to create condition report: ${e.toString()}');
       return false;
     }
   }
@@ -188,17 +185,13 @@ class ToolConditionService {
           .doc(reportId)
           .update(report.toJson());
 
-      _snackbarService.showSnackbar(
-        message: 'Condition report updated successfully!',
-      );
+      NotificationManager().showSuccess('Condition report updated successfully!');
       
       print('✅ Condition report updated: $reportId');
       return true;
     } catch (e) {
       print('❌ Error updating condition report: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to update condition report: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to update condition report: ${e.toString()}');
       return false;
     }
   }
@@ -220,17 +213,13 @@ class ToolConditionService {
         'updatedAt': Timestamp.fromDate(DateTime.now()),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Action marked as completed!',
-      );
+      NotificationManager().showSuccess('Action marked as completed!');
       
       print('✅ Action marked as taken for report: $reportId');
       return true;
     } catch (e) {
       print('❌ Error marking action as taken: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to mark action as taken: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to mark action as taken: ${e.toString()}');
       return false;
     }
   }
@@ -246,17 +235,13 @@ class ToolConditionService {
         'updatedAt': Timestamp.fromDate(DateTime.now()),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Follow-up inspection scheduled!',
-      );
+      NotificationManager().showSuccess('Follow-up inspection scheduled!');
       
       print('✅ Follow-up scheduled for report: $reportId');
       return true;
     } catch (e) {
       print('❌ Error scheduling follow-up: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to schedule follow-up: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to schedule follow-up: ${e.toString()}');
       return false;
     }
   }
@@ -354,17 +339,13 @@ class ToolConditionService {
         'deletedAt': Timestamp.fromDate(DateTime.now()),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Photo deleted successfully!',
-      );
+      NotificationManager().showSuccess('Photo deleted successfully!');
       
       print('✅ Photo deleted: $photoId');
       return true;
     } catch (e) {
       print('❌ Error deleting photo: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to delete photo: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to delete photo: ${e.toString()}');
       return false;
     }
   }

@@ -7,6 +7,7 @@ import '../../models/tool/advanced_tool_models.dart';
 import '../../config/firebase_config.dart';
 import 'tool_inventory_service.dart';
 import 'tool_reservation_service.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class ToolSharingService {
@@ -217,17 +218,13 @@ class ToolSharingService {
           .collection(_sharingCollection)
           .add(request);
 
-      _snackbarService.showSnackbar(
-        message: 'Tool sharing request submitted!',
-      );
+      NotificationManager().showSuccess('Tool sharing request submitted!');
       
       print('✅ Tool sharing request created: ${request['requestId']}');
       return true;
     } catch (e) {
       print('❌ Error requesting tool sharing: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to request tool sharing: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to request tool sharing: ${e.toString()}');
       return false;
     }
   }
@@ -287,17 +284,13 @@ class ToolSharingService {
         requiresApproval: false,
       );
 
-      _snackbarService.showSnackbar(
-        message: 'Tool sharing request approved!',
-      );
+      NotificationManager().showSuccess('Tool sharing request approved!');
       
       print('✅ Tool sharing request approved: $requestId');
       return true;
     } catch (e) {
       print('❌ Error approving sharing request: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to approve sharing request: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to approve sharing request: ${e.toString()}');
       return false;
     }
   }
@@ -322,17 +315,13 @@ class ToolSharingService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Tool sharing request rejected',
-      );
+      NotificationManager().showSuccess('Tool sharing request rejected');
       
       print('✅ Tool sharing request rejected: $requestId');
       return true;
     } catch (e) {
       print('❌ Error rejecting sharing request: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to reject sharing request: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to reject sharing request: ${e.toString()}');
       return false;
     }
   }
@@ -349,17 +338,13 @@ class ToolSharingService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Shared tool usage started!',
-      );
+      NotificationManager().showSuccess('Shared tool usage started!');
       
       print('✅ Shared tool usage started: $requestId');
       return true;
     } catch (e) {
       print('❌ Error starting shared tool usage: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to start shared tool usage: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to start shared tool usage: ${e.toString()}');
       return false;
     }
   }
@@ -382,17 +367,13 @@ class ToolSharingService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Shared tool returned successfully!',
-      );
+      NotificationManager().showSuccess('Shared tool returned successfully!');
       
       print('✅ Shared tool usage completed: $requestId');
       return true;
     } catch (e) {
       print('❌ Error completing shared tool usage: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to complete shared tool usage: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to complete shared tool usage: ${e.toString()}');
       return false;
     }
   }
@@ -409,17 +390,13 @@ class ToolSharingService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Tool sharing request cancelled',
-      );
+      NotificationManager().showSuccess('Tool sharing request cancelled');
       
       print('✅ Tool sharing request cancelled: $requestId');
       return true;
     } catch (e) {
       print('❌ Error cancelling sharing request: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to cancel sharing request: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to cancel sharing request: ${e.toString()}');
       return false;
     }
   }
@@ -550,17 +527,13 @@ class ToolSharingService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Sharing preferences updated!',
-      );
+      NotificationManager().showSuccess('Sharing preferences updated!');
       
       print('✅ Team sharing preferences updated: $teamId');
       return true;
     } catch (e) {
       print('❌ Error updating sharing preferences: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to update sharing preferences: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to update sharing preferences: ${e.toString()}');
       return false;
     }
   }

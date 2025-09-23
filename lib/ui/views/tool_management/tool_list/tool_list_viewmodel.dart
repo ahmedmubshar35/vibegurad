@@ -6,6 +6,7 @@ import '../../../../services/core/authentication_service.dart';
 import '../../../../services/features/tool_service.dart';
 import '../../../../models/tool/tool.dart';
 import '../../../../models/core/user.dart';
+import '../../../../services/core/notification_manager.dart';
 
 class ToolListViewModel extends ReactiveViewModel {
   final _authService = locator<AuthenticationService>();
@@ -84,10 +85,7 @@ class ToolListViewModel extends ReactiveViewModel {
       }
     } catch (e) {
       print('❌ Error loading tools: $e');
-      _snackbarService.showSnackbar(
-        message: 'Error loading tools: $e',
-        duration: const Duration(seconds: 3),
-      );
+      NotificationManager().showError('Error loading tools: $e');
     } finally {
       setBusy(false);
     }
@@ -208,35 +206,23 @@ class ToolListViewModel extends ReactiveViewModel {
   // Navigation methods
   void navigateToToolDetails(Tool tool) {
     // TODO: Implement tool details navigation when route is added
-    _snackbarService.showSnackbar(
-      message: 'Tool details navigation coming soon',
-      duration: const Duration(seconds: 2),
-    );
+    NotificationManager().showInfo('Tool details navigation coming soon');
   }
 
   void navigateToAddTool() {
     if (!isManager) {
-      _snackbarService.showSnackbar(
-        message: 'Only managers can add new tools',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showWarning('Only managers can add new tools');
       return;
     }
     
     // TODO: Implement add tool navigation when route is added
-    _snackbarService.showSnackbar(
-      message: 'Add tool navigation coming soon',
-      duration: const Duration(seconds: 2),
-    );
+    NotificationManager().showInfo('Add tool navigation coming soon');
   }
 
   // Tool management methods
   Future<void> toggleToolAvailability(Tool tool) async {
     if (!isManager) {
-      _snackbarService.showSnackbar(
-        message: 'Only managers can modify tool availability',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showWarning('Only managers can modify tool availability');
       return;
     }
     
@@ -245,15 +231,9 @@ class ToolListViewModel extends ReactiveViewModel {
     try {
       // TODO: Implement updateToolAvailability in ToolService
       await _toolService.updateTool(tool.id!, tool.copyWith(isToolActive: !tool.isToolActive));
-      _snackbarService.showSnackbar(
-        message: '${tool.name} ${tool.isToolActive ? 'disabled' : 'enabled'}',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showSuccess('${tool.name} ${tool.isToolActive ? 'disabled' : 'enabled'}');
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error updating tool: $e',
-        duration: const Duration(seconds: 3),
-      );
+      NotificationManager().showError('Error updating tool: $e');
     } finally {
       setBusy(false);
     }
@@ -261,10 +241,7 @@ class ToolListViewModel extends ReactiveViewModel {
 
   Future<void> markForMaintenance(Tool tool) async {
     if (!isManager) {
-      _snackbarService.showSnackbar(
-        message: 'Only managers can schedule maintenance',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showWarning('Only managers can schedule maintenance');
       return;
     }
     
@@ -274,15 +251,9 @@ class ToolListViewModel extends ReactiveViewModel {
       // TODO: Implement scheduleToolMaintenance in ToolService
       final nextMaintenance = DateTime.now().add(const Duration(days: 30));
       await _toolService.updateTool(tool.id!, tool.copyWith(nextMaintenanceDate: nextMaintenance));
-      _snackbarService.showSnackbar(
-        message: '${tool.name} scheduled for maintenance',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showSuccess('${tool.name} scheduled for maintenance');
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error scheduling maintenance: $e',
-        duration: const Duration(seconds: 3),
-      );
+      NotificationManager().showError('Error scheduling maintenance: $e');
     } finally {
       setBusy(false);
     }
@@ -290,10 +261,7 @@ class ToolListViewModel extends ReactiveViewModel {
 
   Future<void> deleteTool(Tool tool) async {
     if (!isManager) {
-      _snackbarService.showSnackbar(
-        message: 'Only managers can delete tools',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showWarning('Only managers can delete tools');
       return;
     }
     
@@ -301,15 +269,9 @@ class ToolListViewModel extends ReactiveViewModel {
     
     try {
       await _toolService.deleteTool(tool.id!);
-      _snackbarService.showSnackbar(
-        message: '${tool.name} deleted successfully',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showSuccess('${tool.name} deleted successfully');
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error deleting tool: $e',
-        duration: const Duration(seconds: 3),
-      );
+      NotificationManager().showError('Error deleting tool: $e');
     } finally {
       setBusy(false);
     }
@@ -361,15 +323,9 @@ class ToolListViewModel extends ReactiveViewModel {
         tools.map((tool) => _toolService.updateTool(tool.id!, tool.copyWith(isToolActive: isAvailable)))
       );
       
-      _snackbarService.showSnackbar(
-        message: '${tools.length} tools updated successfully',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showSuccess('${tools.length} tools updated successfully');
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error updating tools: $e',
-        duration: const Duration(seconds: 3),
-      );
+      NotificationManager().showError('Error updating tools: $e');
     } finally {
       setBusy(false);
     }
@@ -377,10 +333,7 @@ class ToolListViewModel extends ReactiveViewModel {
 
   Future<void> exportToolList() async {
     // TODO: Implement tool list export functionality
-    _snackbarService.showSnackbar(
-      message: 'Export functionality coming soon',
-      duration: const Duration(seconds: 2),
-    );
+    NotificationManager().showInfo('Export functionality coming soon');
   }
 
 }

@@ -1,15 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
-import 'package:stacked_services/stacked_services.dart';
-import 'package:get_it/get_it.dart';
 
 import '../../models/timer/timer_session.dart';
 import '../../config/firebase_config.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class SessionService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  SnackbarService get _snackbarService => GetIt.instance<SnackbarService>();
 
   // Get recent sessions for a user
   Stream<List<TimerSession>> getRecentSessions(String userId, {int limit = 10}) {

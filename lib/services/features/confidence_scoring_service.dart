@@ -9,6 +9,7 @@ import '../../models/ai/recognition_result.dart';
 import '../../models/ai/tool_image_database.dart';
 import '../../models/tool/tool.dart';
 import '../../enums/tool_type.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class ConfidenceScoringService with ListenableServiceMixin {
@@ -422,10 +423,7 @@ class ConfidenceScoringService with ListenableServiceMixin {
     _confidenceHistory.clear();
     _recognitionHistory.clear();
     
-    _snackbarService.showSnackbar(
-      message: 'Confidence statistics reset',
-      duration: const Duration(seconds: 2),
-    );
+    NotificationManager().showInfo('Confidence statistics reset');
   }
 }
 

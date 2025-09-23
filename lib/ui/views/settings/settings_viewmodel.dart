@@ -7,6 +7,7 @@ import '../../../services/core/theme_service.dart';
 import '../../../services/core/localization_service.dart';
 import '../../../models/core/user.dart';
 import 'widgets/account_management.dart';
+import '../../../services/core/notification_manager.dart';
 
 class SettingsViewModel extends ReactiveViewModel {
   final _authService = locator<AuthenticationService>();
@@ -125,7 +126,7 @@ class SettingsViewModel extends ReactiveViewModel {
   Future<void> _saveSettings() async {
     // In a real app, you'd save to SharedPreferences or Firebase
     await Future.delayed(Duration(milliseconds: 500));
-    _snackbarService.showSnackbar(message: 'Settings saved');
+    NotificationManager().showSuccess('Settings saved');
   }
 
   Future<void> resetToDefaults() async {
@@ -144,7 +145,7 @@ class SettingsViewModel extends ReactiveViewModel {
     await Future.delayed(Duration(seconds: 1));
     setBusy(false);
     notifyListeners();
-    _snackbarService.showSnackbar(message: 'Settings reset to defaults');
+    NotificationManager().showInfo('Settings reset to defaults');
   }
 
   Future<void> exportSettings() async {
@@ -154,7 +155,7 @@ class SettingsViewModel extends ReactiveViewModel {
     await Future.delayed(Duration(seconds: 2));
     
     setBusy(false);
-    _snackbarService.showSnackbar(message: 'Settings exported successfully');
+    NotificationManager().showSuccess('Settings exported successfully');
   }
 
   Future<void> importSettings() async {
@@ -164,7 +165,7 @@ class SettingsViewModel extends ReactiveViewModel {
     await Future.delayed(Duration(seconds: 2));
     
     setBusy(false);
-    _snackbarService.showSnackbar(message: 'Settings imported successfully');
+    NotificationManager().showSuccess('Settings imported successfully');
   }
 
   Future<void> clearCache() async {
@@ -174,7 +175,7 @@ class SettingsViewModel extends ReactiveViewModel {
     await Future.delayed(Duration(seconds: 1));
     
     setBusy(false);
-    _snackbarService.showSnackbar(message: 'Cache cleared successfully');
+    NotificationManager().showSuccess('Cache cleared successfully');
   }
 
   Future<void> signOut() async {
@@ -184,7 +185,7 @@ class SettingsViewModel extends ReactiveViewModel {
       await _authService.signOut();
       _navigationService.clearStackAndShow('/login');
     } catch (e) {
-      _snackbarService.showSnackbar(message: 'Error signing out: $e');
+      NotificationManager().showError('Error signing out: $e');
     } finally {
       setBusy(false);
     }

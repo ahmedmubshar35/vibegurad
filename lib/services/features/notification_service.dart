@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../config/app_config.dart';
 import '../../enums/exposure_level.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class NotificationService {
@@ -24,9 +25,7 @@ class NotificationService {
       await _initializeLocalNotifications();
 
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to initialize notifications: $e',
-      );
+      NotificationManager().showError('Failed to initialize notifications: $e');
     }
   }
 
@@ -90,9 +89,7 @@ class NotificationService {
         payload: 'safety_warning,${level.name}',
       );
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to show safety warning: $e',
-      );
+      NotificationManager().showError('Failed to show safety warning: $e');
     }
   }
 

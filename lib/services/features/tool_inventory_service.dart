@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/tool/advanced_tool_models.dart';
 import '../../config/firebase_config.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class ToolInventoryService {
@@ -154,17 +155,13 @@ class ToolInventoryService {
           .collection(_collection)
           .add(inventory.toJson());
 
-      _snackbarService.showSnackbar(
-        message: 'Tool "${inventory.toolName}" added to inventory!',
-      );
+      NotificationManager().showSuccess('Tool "${inventory.toolName}" added to inventory!');
       
       print('✅ Inventory item added: ${inventory.toolName}');
       return true;
     } catch (e) {
       print('❌ Error adding inventory item: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to add inventory item: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to add inventory item: ${e.toString()}');
       return false;
     }
   }
@@ -177,17 +174,13 @@ class ToolInventoryService {
           .doc(inventoryId)
           .update(inventory.toJson());
 
-      _snackbarService.showSnackbar(
-        message: 'Inventory item "${inventory.toolName}" updated!',
-      );
+      NotificationManager().showSuccess('Inventory item "${inventory.toolName}" updated!');
       
       print('✅ Inventory item updated: $inventoryId');
       return true;
     } catch (e) {
       print('❌ Error updating inventory item: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to update inventory item: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to update inventory item: ${e.toString()}');
       return false;
     }
   }
@@ -203,17 +196,13 @@ class ToolInventoryService {
         'updatedAt': Timestamp.fromDate(DateTime.now()),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Tool status updated to ${status.name}',
-      );
+      NotificationManager().showSuccess('Tool status updated to ${status.name}');
       
       print('✅ Tool status updated: $inventoryId to ${status.name}');
       return true;
     } catch (e) {
       print('❌ Error updating tool status: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to update tool status: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to update tool status: ${e.toString()}');
       return false;
     }
   }
@@ -229,17 +218,13 @@ class ToolInventoryService {
         'updatedAt': Timestamp.fromDate(DateTime.now()),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Tool condition updated to ${condition.name}',
-      );
+      NotificationManager().showSuccess('Tool condition updated to ${condition.name}');
       
       print('✅ Tool condition updated: $inventoryId to ${condition.name}');
       return true;
     } catch (e) {
       print('❌ Error updating tool condition: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to update tool condition: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to update tool condition: ${e.toString()}');
       return false;
     }
   }
@@ -255,17 +240,13 @@ class ToolInventoryService {
         'updatedAt': Timestamp.fromDate(DateTime.now()),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Tool location updated to $location',
-      );
+      NotificationManager().showSuccess('Tool location updated to $location');
       
       print('✅ Tool location updated: $inventoryId to $location');
       return true;
     } catch (e) {
       print('❌ Error updating tool location: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to update tool location: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to update tool location: ${e.toString()}');
       return false;
     }
   }
@@ -281,17 +262,13 @@ class ToolInventoryService {
         'updatedAt': Timestamp.fromDate(DateTime.now()),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Stock quantity updated to $newQuantity',
-      );
+      NotificationManager().showSuccess('Stock quantity updated to $newQuantity');
       
       print('✅ Stock quantity updated: $inventoryId to $newQuantity');
       return true;
     } catch (e) {
       print('❌ Error updating stock quantity: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to update stock quantity: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to update stock quantity: ${e.toString()}');
       return false;
     }
   }
@@ -307,17 +284,13 @@ class ToolInventoryService {
         'updatedAt': Timestamp.fromDate(DateTime.now()),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Inventory item deleted successfully!',
-      );
+      NotificationManager().showSuccess('Inventory item deleted successfully!');
       
       print('✅ Inventory item deleted (soft): $inventoryId');
       return true;
     } catch (e) {
       print('❌ Error deleting inventory item: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to delete inventory item: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to delete inventory item: ${e.toString()}');
       return false;
     }
   }
@@ -406,17 +379,13 @@ class ToolInventoryService {
 
       await batch.commit();
 
-      _snackbarService.showSnackbar(
-        message: 'Bulk stock update completed for ${updates.length} items!',
-      );
+      NotificationManager().showSuccess('Bulk stock update completed for ${updates.length} items!');
       
       print('✅ Bulk stock update completed: ${updates.length} items');
       return true;
     } catch (e) {
       print('❌ Error bulk updating stock: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to bulk update stock: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to bulk update stock: ${e.toString()}');
       return false;
     }
   }

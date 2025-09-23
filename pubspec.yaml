@@ -66,6 +66,7 @@ dependencies:
   # Notifications
   flutter_local_notifications: ^19.4.1
   # awesome_notifications: ^0.10.1  # Temporarily disabled due to iOS build issues
+  fluttertoast: ^8.2.8
   vibration: ^3.0.0
 
   # Background Services
@@ -93,8 +94,8 @@ dependencies:
   share_plus: ^11.1.0
   cron: ^0.6.2
   csv: ^6.0.0
-  google_mlkit_image_labeling: 0.10.0
-  google_mlkit_object_detection: 0.11.0
+  google_mlkit_image_labeling: ^0.13.0
+  google_mlkit_object_detection: ^0.14.0
   mobile_scanner: ^7.0.1
 
 dev_dependencies:

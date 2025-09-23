@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'app/app.dart';
 import 'app/app.locator.dart';
@@ -26,6 +27,9 @@ void main() async {
 
     // Setup locator and dependency injection
     await setupLocator();
+
+    // Request camera permission ONCE - iOS will show dialog if needed
+    await Permission.camera.request();
 
     // Initialize services with error handling
     await GetIt.instance<ThemeService>().initialize();

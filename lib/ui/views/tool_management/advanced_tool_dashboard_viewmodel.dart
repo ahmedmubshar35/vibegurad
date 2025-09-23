@@ -11,6 +11,7 @@ import '../../../services/features/tool_condition_service.dart';
 import '../../../services/features/tool_performance_service.dart';
 import '../../../services/features/tool_warranty_service.dart';
 import '../../../services/features/tool_cost_tracking_service.dart';
+import '../../../services/core/notification_manager.dart';
 
 class AdvancedToolDashboardViewModel extends BaseViewModel {
   final _navigationService = GetIt.instance<NavigationService>();
@@ -95,9 +96,7 @@ class AdvancedToolDashboardViewModel extends BaseViewModel {
       ]);
     } catch (e) {
       print('Error loading dashboard data: $e');
-      _snackbarService.showSnackbar(
-        message: 'Error loading dashboard data: ${e.toString()}',
-      );
+      NotificationManager().showError('Error loading dashboard data: ${e.toString()}');
     } finally {
       setBusy(false);
     }
@@ -305,7 +304,7 @@ class AdvancedToolDashboardViewModel extends BaseViewModel {
 
   Future<void> refreshData() async {
     await loadData();
-    _snackbarService.showSnackbar(message: 'Data refreshed successfully');
+    NotificationManager().showSuccess('Data refreshed successfully');
   }
 
   // Handle menu actions
@@ -380,7 +379,7 @@ class AdvancedToolDashboardViewModel extends BaseViewModel {
 
   Future<void> approveReservation(ToolReservation reservation) async {
     if (_userId == null) {
-      _snackbarService.showSnackbar(message: 'User not authenticated');
+      NotificationManager().showError('User not authenticated');
       return;
     }
     
@@ -391,7 +390,7 @@ class AdvancedToolDashboardViewModel extends BaseViewModel {
     );
     
     if (success) {
-      _snackbarService.showSnackbar(message: 'Reservation approved successfully');
+      NotificationManager().showSuccess('Reservation approved successfully');
     }
   }
 
@@ -406,7 +405,7 @@ class AdvancedToolDashboardViewModel extends BaseViewModel {
 
   Future<void> approveSharingRequest(Map<String, dynamic> request) async {
     if (_userId == null) {
-      _snackbarService.showSnackbar(message: 'User not authenticated');
+      NotificationManager().showError('User not authenticated');
       return;
     }
     
@@ -417,7 +416,7 @@ class AdvancedToolDashboardViewModel extends BaseViewModel {
     );
     
     if (success) {
-      _snackbarService.showSnackbar(message: 'Sharing request approved');
+      NotificationManager().showSuccess('Sharing request approved');
     }
   }
 
@@ -492,7 +491,7 @@ class AdvancedToolDashboardViewModel extends BaseViewModel {
 
   void _navigateToToolDetails(String toolId) {
     // Navigate to tool details view
-    _snackbarService.showSnackbar(message: 'Navigating to tool details: $toolId');
+    NotificationManager().showInfo('Navigating to tool details: $toolId');
   }
 
   void _showExportDataDialog() {

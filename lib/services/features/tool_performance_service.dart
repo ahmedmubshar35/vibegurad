@@ -4,6 +4,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/tool/advanced_tool_models.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class ToolPerformanceService {
@@ -157,17 +158,13 @@ class ToolPerformanceService {
         await _updateBaseline(toolId, metricType, value);
       }
 
-      _snackbarService.showSnackbar(
-        message: 'Performance metric recorded successfully!',
-      );
+      NotificationManager().showSuccess('Performance metric recorded successfully!');
       
       print('✅ Performance metric recorded: ${metric.metricId}');
       return true;
     } catch (e) {
       print('❌ Error recording performance metric: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to record performance metric: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to record performance metric: ${e.toString()}');
       return false;
     }
   }
@@ -184,17 +181,13 @@ class ToolPerformanceService {
 
       await batch.commit();
 
-      _snackbarService.showSnackbar(
-        message: 'Bulk performance metrics recorded: ${metrics.length} items',
-      );
+      NotificationManager().showSuccess('Bulk performance metrics recorded: ${metrics.length} items');
       
       print('✅ Bulk metrics recorded: ${metrics.length} items');
       return true;
     } catch (e) {
       print('❌ Error bulk recording metrics: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to bulk record metrics: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to bulk record metrics: ${e.toString()}');
       return false;
     }
   }

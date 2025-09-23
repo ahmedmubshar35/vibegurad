@@ -136,6 +136,10 @@ class _VibeGuardAppState extends State<VibeGuardApp> {
       darkTheme: AppTheme.darkTheme,
       themeMode: _themeService.themeMode,
 
+      // Add builder for FlutterToast context
+      builder: (context, child) {
+        return child ?? const SizedBox.shrink();
+      },
 
       // Localization
       locale: _localizationService.currentLocale,

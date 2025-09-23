@@ -2,17 +2,15 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:injectable/injectable.dart';
-import 'package:stacked_services/stacked_services.dart';
-import 'package:get_it/get_it.dart';
 
 import '../../config/firebase_config.dart';
+import 'notification_manager.dart';
 
 @lazySingleton
 class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
   
-  SnackbarService get _snackbarService => GetIt.instance<SnackbarService>();
 
   FirebaseService();
 
@@ -53,9 +51,7 @@ class FirebaseService {
     try {
       return await _firestore.collection(collection).add(data);
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to add document: $e',
-      );
+      NotificationManager().showError('Failed to add document: $e');
       rethrow;
     }
   }
@@ -68,9 +64,7 @@ class FirebaseService {
     try {
       await _firestore.collection(collection).doc(documentId).update(data);
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to update document: $e',
-      );
+      NotificationManager().showError('Failed to update document: $e');
       rethrow;
     }
   }
@@ -79,9 +73,7 @@ class FirebaseService {
     try {
       await _firestore.collection(collection).doc(documentId).delete();
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to delete document: $e',
-      );
+      NotificationManager().showError('Failed to delete document: $e');
       rethrow;
     }
   }
@@ -93,9 +85,7 @@ class FirebaseService {
     try {
       return await _firestore.collection(collection).doc(documentId).get();
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to get document: $e',
-      );
+      NotificationManager().showError('Failed to get document: $e');
       rethrow;
     }
   }
@@ -113,9 +103,7 @@ class FirebaseService {
       
       return query.snapshots();
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to get documents stream: $e',
-      );
+      NotificationManager().showError('Failed to get documents stream: $e');
       rethrow;
     }
   }
@@ -133,9 +121,7 @@ class FirebaseService {
       
       return await query.get();
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to get documents: $e',
-      );
+      NotificationManager().showError('Failed to get documents: $e');
       rethrow;
     }
   }
@@ -152,9 +138,7 @@ class FirebaseService {
       final snapshot = await uploadTask;
       return await snapshot.ref.getDownloadURL();
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to upload file: $e',
-      );
+      NotificationManager().showError('Failed to upload file: $e');
       rethrow;
     }
   }
@@ -163,9 +147,7 @@ class FirebaseService {
     try {
       await storageRef.child(fileName).delete();
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to delete file: $e',
-      );
+      NotificationManager().showError('Failed to delete file: $e');
       rethrow;
     }
   }
@@ -191,9 +173,7 @@ class FirebaseService {
       
       await batch.commit();
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to perform batch operation: $e',
-      );
+      NotificationManager().showError('Failed to perform batch operation: $e');
       rethrow;
     }
   }
@@ -203,9 +183,7 @@ class FirebaseService {
     try {
       return await _firestore.runTransaction(transaction);
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to run transaction: $e',
-      );
+      NotificationManager().showError('Failed to run transaction: $e');
       rethrow;
     }
   }

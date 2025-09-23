@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 import 'settings_viewmodel.dart';
+import '../accessibility/accessibility_view.dart';
+import '../help/help_view.dart';
+import '../feedback/feedback_view.dart';
+import '../performance/performance_view.dart';
+import '../offline/offline_mode_view.dart';
+import '../data_usage/data_usage_view.dart';
 
 class SettingsView extends StackedView<SettingsViewModel> {
   const SettingsView({super.key});
@@ -14,11 +20,10 @@ class SettingsView extends StackedView<SettingsViewModel> {
         title: Row(
           children: [
             // App Logo
-            Image.asset(
-              'assets/images/App_logo.png',
-              height: 28,
-              width: 28,
-              fit: BoxFit.contain,
+            const Icon(
+              Icons.settings,
+              size: 28,
+              color: Colors.white,
             ),
             const SizedBox(width: 8),
             const Text('Settings'),
@@ -418,15 +423,6 @@ class SettingsView extends StackedView<SettingsViewModel> {
               onTap: () => _navigateToPerformance(context),
             ),
             
-            // Battery Optimization
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('Battery Optimization'),
-              subtitle: const Text('Optimize battery usage and power saving'),
-              leading: Icon(Icons.battery_std),
-              trailing: Icon(Icons.arrow_forward_ios),
-              onTap: () => _navigateToBatteryOptimization(context),
-            ),
             
             // Data Usage Optimization
             ListTile(
@@ -798,32 +794,46 @@ class SettingsView extends StackedView<SettingsViewModel> {
 
   // Navigation methods for new features
   void _navigateToAccessibility(BuildContext context) {
-    // Navigate to accessibility settings
-    Navigator.pushNamed(context, '/accessibility');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AccessibilityView()),
+    );
   }
 
   void _navigateToHelp(BuildContext context) {
-    Navigator.pushNamed(context, '/help');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HelpView()),
+    );
   }
 
   void _navigateToFeedback(BuildContext context) {
-    Navigator.pushNamed(context, '/feedback');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const FeedbackView()),
+    );
   }
 
   void _navigateToPerformance(BuildContext context) {
-    Navigator.pushNamed(context, '/performance');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const PerformanceView()),
+    );
   }
 
-  void _navigateToBatteryOptimization(BuildContext context) {
-    Navigator.pushNamed(context, '/battery-optimization');
-  }
 
   void _navigateToDataUsage(BuildContext context) {
-    Navigator.pushNamed(context, '/data-usage');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const DataUsageView()),
+    );
   }
 
   void _navigateToOfflineMode(BuildContext context) {
-    Navigator.pushNamed(context, '/offline-mode');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const OfflineModeView()),
+    );
   }
 
   @override

@@ -17,11 +17,10 @@ class ToolListView extends StackedView<ToolListViewModel> {
         title: Row(
           children: [
             // App Logo
-            Image.asset(
-              'assets/images/App_logo.png',
-              height: 28,
-              width: 28,
-              fit: BoxFit.contain,
+            const Icon(
+              Icons.construction,
+              size: 28,
+              color: Colors.white,
             ),
             const SizedBox(width: 8),
             const Text('Tool Management'),

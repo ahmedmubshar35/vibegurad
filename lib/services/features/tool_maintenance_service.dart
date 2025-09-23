@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../models/tool/tool.dart';
 import '../../enums/exposure_level.dart';
 import '../features/notification_service.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class ToolMaintenanceService {
@@ -45,9 +46,7 @@ class ToolMaintenanceService {
           .collection('tool_maintenance')
           .add(record.toFirestore());
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to create maintenance record: $e',
-      );
+      NotificationManager().showError('Failed to create maintenance record: $e');
     }
   }
 
@@ -84,9 +83,7 @@ class ToolMaintenanceService {
         );
       }
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to update tool usage: $e',
-      );
+      NotificationManager().showError('Failed to update tool usage: $e');
     }
   }
 
@@ -130,9 +127,7 @@ class ToolMaintenanceService {
         },
       );
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to send maintenance notification: $e',
-      );
+      NotificationManager().showError('Failed to send maintenance notification: $e');
     }
   }
 
@@ -214,13 +209,9 @@ class ToolMaintenanceService {
 
       await doc.reference.update(updatedRecord.toFirestore());
 
-      _snackbarService.showSnackbar(
-        message: 'Maintenance record updated successfully',
-      );
+      NotificationManager().showSuccess('Maintenance record updated successfully');
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to record maintenance completion: $e',
-      );
+      NotificationManager().showError('Failed to record maintenance completion: $e');
     }
   }
 
@@ -284,9 +275,7 @@ class ToolMaintenanceService {
           .collection('maintenance_reminders')
           .add(reminder.toFirestore());
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to schedule maintenance reminder: $e',
-      );
+      NotificationManager().showError('Failed to schedule maintenance reminder: $e');
     }
   }
 

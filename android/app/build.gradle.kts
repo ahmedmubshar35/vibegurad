@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.example.vibe_guard"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36  // Set to API 36 for plugin compatibility
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -30,7 +30,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 26  // Required by tflite_flutter package
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 34  // Keep stable for device compatibility
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         multiDexEnabled = true

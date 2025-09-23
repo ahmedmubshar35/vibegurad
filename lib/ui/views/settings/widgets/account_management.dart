@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import '../../../../services/core/authentication_service.dart';
 import '../../../../services/core/auth_session_service.dart';
 import '../../../../app/app.router.dart';
+import '../../../../services/core/notification_manager.dart';
 
 class AccountManagementView extends StatefulWidget {
   const AccountManagementView({super.key});
@@ -102,9 +103,7 @@ class _AccountManagementViewState extends State<AccountManagementView> {
             ElevatedButton(
               onPressed: () async {
                 if (_passwordController.text.isEmpty) {
-                  _snackbarService.showSnackbar(
-                    message: 'Please enter your password',
-                  );
+                  NotificationManager().showWarning('Please enter your password');
                   return;
                 }
                 
@@ -137,9 +136,7 @@ class _AccountManagementViewState extends State<AccountManagementView> {
   // Clear session data
   Future<void> _clearSessionData() async {
     await _sessionService.clearRememberMe();
-    _snackbarService.showSnackbar(
-      message: 'Session data cleared',
-    );
+    NotificationManager().showInfo('Session data cleared');
   }
   
   @override
@@ -188,9 +185,7 @@ class _AccountManagementViewState extends State<AccountManagementView> {
                         subtitle: const Text('Configure auto-logout time'),
                         trailing: const Text('30 min'),
                         onTap: () {
-                          _snackbarService.showSnackbar(
-                            message: 'Session timeout configuration coming soon',
-                          );
+                          NotificationManager().showInfo('Session timeout configuration coming soon');
                         },
                       ),
                       
@@ -200,9 +195,7 @@ class _AccountManagementViewState extends State<AccountManagementView> {
                         title: const Text('Export My Data'),
                         subtitle: const Text('Download all your personal data'),
                         onTap: () {
-                          _snackbarService.showSnackbar(
-                            message: 'Data export feature coming soon',
-                          );
+                          NotificationManager().showInfo('Data export feature coming soon');
                         },
                       ),
                     ],

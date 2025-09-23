@@ -9,6 +9,7 @@ import '../../models/tool/tool.dart';
 import '../../enums/tool_type.dart';
 import 'tool_service.dart';
 import '../core/authentication_service.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class ManualCorrectionService with ListenableServiceMixin {
@@ -216,10 +217,7 @@ class ManualCorrectionService with ListenableServiceMixin {
         _correctionHistory.removeAt(0);
       }
       
-      _snackbarService.showSnackbar(
-        message: '✅ Correction recorded - Thank you for improving AI accuracy!',
-        duration: const Duration(seconds: 3),
-      );
+      NotificationManager().showSuccess('✅ Correction recorded - Thank you for improving AI accuracy!');
     } catch (e) {
       print('Error recording correction: $e');
     }
@@ -409,10 +407,7 @@ class ManualCorrectionService with ListenableServiceMixin {
     _commonMistakes.clear();
     _userCorrections.clear();
     
-    _snackbarService.showSnackbar(
-      message: 'Correction data reset',
-      duration: const Duration(seconds: 2),
-    );
+    NotificationManager().showInfo('Correction data reset');
   }
 }
 

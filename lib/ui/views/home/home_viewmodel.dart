@@ -18,6 +18,7 @@ import '../../../enums/tool_type.dart';
 import '../help/help_view.dart';
 import '../feedback/feedback_view.dart';
 import '../accessibility/accessibility_view.dart';
+import '../../../services/core/notification_manager.dart';
 import '../offline/offline_mode_view.dart';
 import '../performance/performance_view.dart';
 import '../tool_management/tool_list/tool_list_view.dart';
@@ -114,9 +115,7 @@ class HomeViewModel extends ReactiveViewModel {
       final hasPermission = await _cameraService.requestCameraPermission();
       
       if (!hasPermission) {
-        _snackbarService.showSnackbar(
-          message: 'Camera permission is required for tool recognition',
-        );
+        NotificationManager().showError('Camera permission is required for tool recognition');
         return;
       }
       
@@ -124,9 +123,7 @@ class HomeViewModel extends ReactiveViewModel {
       await _navigationService.navigateTo(Routes.cameraView);
       
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error starting camera: ${e.toString()}',
-      );
+      NotificationManager().showError('Error starting camera: ${e.toString()}');
     } finally {
       setBusy(false);
     }
@@ -149,9 +146,7 @@ class HomeViewModel extends ReactiveViewModel {
       }
     } catch (e) {
       print('❌ Error in quickStartManualTool: $e');
-      _snackbarService.showSnackbar(
-        message: 'Error starting session: ${e.toString()}',
-      );
+      NotificationManager().showError('Error starting session: ${e.toString()}');
     }
   }
 
@@ -203,25 +198,18 @@ class HomeViewModel extends ReactiveViewModel {
       
       if (success) {
         print('✅ Timer session started successfully');
-        _snackbarService.showSnackbar(
-          message: 'Started tracking ${tool.name} usage',
-          duration: const Duration(seconds: 2),
-        );
+        NotificationManager().showSuccess('Started tracking ${tool.name} usage');
         
         // Navigate to timer view
         print('🧭 Navigating to timer view');
         await _navigationService.navigateTo(Routes.timerView);
       } else {
         print('❌ Failed to start timer session');
-        _snackbarService.showSnackbar(
-          message: 'Failed to start timer session',
-        );
+        NotificationManager().showError('Failed to start timer session');
       }
     } catch (e) {
       print('❌ Error in _startTimerWithTool: $e');
-      _snackbarService.showSnackbar(
-        message: 'Error starting session: ${e.toString()}',
-      );
+      NotificationManager().showError('Error starting session: ${e.toString()}');
     } finally {
       setBusy(false);
     }
@@ -235,14 +223,9 @@ class HomeViewModel extends ReactiveViewModel {
     
     try {
       await _timerService.stopSession();
-      _snackbarService.showSnackbar(
-        message: 'Session stopped and saved',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showSuccess('Session stopped and saved');
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error stopping session: ${e.toString()}',
-      );
+      NotificationManager().showError('Error stopping session: ${e.toString()}');
     } finally {
       setBusy(false);
     }
@@ -257,19 +240,13 @@ class HomeViewModel extends ReactiveViewModel {
     try {
       if (isTimerRunning) {
         await _timerService.pauseSession();
-        _snackbarService.showSnackbar(
-          message: 'Session paused',
-        );
+        NotificationManager().showInfo('Session paused');
       } else {
         await _timerService.resumeSession();
-        _snackbarService.showSnackbar(
-          message: 'Session resumed',
-        );
+        NotificationManager().showSuccess('Session resumed');
       }
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error toggling session: ${e.toString()}',
-      );
+      NotificationManager().showError('Error toggling session: ${e.toString()}');
     } finally {
       setBusy(false);
     }
@@ -291,9 +268,7 @@ class HomeViewModel extends ReactiveViewModel {
   void navigateToDashboard() {
     // Only for managers/admins
     if (currentUser?.role.name == 'worker') {
-      _snackbarService.showSnackbar(
-        message: 'Dashboard access is for managers and admins only',
-      );
+      NotificationManager().showWarning('Dashboard access is only for admins');
       return;
     }
     _navigationService.navigateTo(Routes.dashboardView);
@@ -432,9 +407,7 @@ class HomeViewModel extends ReactiveViewModel {
       await _navigationService.clearStackAndShow(Routes.loginView);
       
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error signing out: ${e.toString()}',
-      );
+      NotificationManager().showError('Error signing out: ${e.toString()}');
     } finally {
       setBusy(false);
     }

@@ -4,6 +4,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/tool/advanced_tool_models.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class ToolReservationService {
@@ -184,9 +185,7 @@ class ToolReservationService {
       );
 
       if (!isAvailable) {
-        _snackbarService.showSnackbar(
-          message: 'Tool is not available for the requested time period',
-        );
+        NotificationManager().showWarning('Tool is not available for the requested time period');
         return false;
       }
 
@@ -219,15 +218,17 @@ class ToolReservationService {
           ? 'Reservation request submitted for approval!'
           : 'Reservation confirmed successfully!';
 
-      _snackbarService.showSnackbar(message: message);
+      if (requiresApproval) {
+        NotificationManager().showInfo(message);
+      } else {
+        NotificationManager().showSuccess(message);
+      }
       
       print('✅ Reservation created: ${reservation.reservationId}');
       return true;
     } catch (e) {
       print('❌ Error creating reservation: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to create reservation: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to create reservation: ${e.toString()}');
       return false;
     }
   }
@@ -241,16 +242,12 @@ class ToolReservationService {
     try {
       final reservation = await getReservation(reservationId);
       if (reservation == null) {
-        _snackbarService.showSnackbar(
-          message: 'Reservation not found',
-        );
+        NotificationManager().showWarning('Reservation not found');
         return false;
       }
 
       if (reservation.status != ReservationStatus.pending) {
-        _snackbarService.showSnackbar(
-          message: 'Reservation is not pending approval',
-        );
+        NotificationManager().showWarning('Reservation is not pending approval');
         return false;
       }
 
@@ -263,9 +260,7 @@ class ToolReservationService {
       );
 
       if (!isAvailable) {
-        _snackbarService.showSnackbar(
-          message: 'Tool is no longer available for the requested time period',
-        );
+        NotificationManager().showWarning('Tool is no longer available for the requested time period');
         return false;
       }
 
@@ -280,17 +275,13 @@ class ToolReservationService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Reservation approved successfully!',
-      );
+      NotificationManager().showSuccess('Reservation approved successfully!');
       
       print('✅ Reservation approved: $reservationId');
       return true;
     } catch (e) {
       print('❌ Error approving reservation: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to approve reservation: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to approve reservation: ${e.toString()}');
       return false;
     }
   }
@@ -315,17 +306,13 @@ class ToolReservationService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Reservation rejected',
-      );
+      NotificationManager().showInfo('Reservation rejected');
       
       print('✅ Reservation rejected: $reservationId');
       return true;
     } catch (e) {
       print('❌ Error rejecting reservation: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to reject reservation: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to reject reservation: ${e.toString()}');
       return false;
     }
   }
@@ -341,17 +328,13 @@ class ToolReservationService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Reservation started!',
-      );
+      NotificationManager().showSuccess('Reservation started!');
       
       print('✅ Reservation started: $reservationId');
       return true;
     } catch (e) {
       print('❌ Error starting reservation: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to start reservation: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to start reservation: ${e.toString()}');
       return false;
     }
   }
@@ -368,17 +351,13 @@ class ToolReservationService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Reservation completed!',
-      );
+      NotificationManager().showSuccess('Reservation completed!');
       
       print('✅ Reservation completed: $reservationId');
       return true;
     } catch (e) {
       print('❌ Error completing reservation: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to complete reservation: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to complete reservation: ${e.toString()}');
       return false;
     }
   }
@@ -395,17 +374,13 @@ class ToolReservationService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Reservation cancelled',
-      );
+      NotificationManager().showInfo('Reservation cancelled');
       
       print('✅ Reservation cancelled: $reservationId');
       return true;
     } catch (e) {
       print('❌ Error cancelling reservation: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to cancel reservation: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to cancel reservation: ${e.toString()}');
       return false;
     }
   }
@@ -415,9 +390,7 @@ class ToolReservationService {
     try {
       final reservation = await getReservation(reservationId);
       if (reservation == null) {
-        _snackbarService.showSnackbar(
-          message: 'Reservation not found',
-        );
+        NotificationManager().showWarning('Reservation not found');
         return false;
       }
 
@@ -430,9 +403,7 @@ class ToolReservationService {
       );
 
       if (!isAvailable) {
-        _snackbarService.showSnackbar(
-          message: 'Tool is not available for the extended period',
-        );
+        NotificationManager().showWarning('Tool is not available for the extended period');
         return false;
       }
 
@@ -444,17 +415,13 @@ class ToolReservationService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Reservation extended successfully!',
-      );
+      NotificationManager().showSuccess('Reservation extended successfully!');
       
       print('✅ Reservation extended: $reservationId');
       return true;
     } catch (e) {
       print('❌ Error extending reservation: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to extend reservation: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to extend reservation: ${e.toString()}');
       return false;
     }
   }

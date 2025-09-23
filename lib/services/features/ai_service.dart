@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:camera/camera.dart';
 import '../../models/tool/tool.dart';
 import '../../enums/tool_type.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class AiService {
@@ -18,14 +19,10 @@ class AiService {
   Future<Tool?> recognizeToolEnhanced(Uint8List imageBytes) async {
     try {
       // TODO: Implement real AI tool recognition
-      _snackbarService.showSnackbar(
-        message: 'AI recognition not yet implemented',
-      );
+      NotificationManager().showInfo('AI recognition not yet implemented');
       return null;
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'AI recognition error: ${e.toString()}',
-      );
+      NotificationManager().showError('AI recognition error: ${e.toString()}');
       return null;
     }
   }
@@ -34,14 +31,10 @@ class AiService {
   Future<Tool?> recognizeToolFromFile(String imagePath) async {
     try {
       // TODO: Implement real AI tool recognition from file
-      _snackbarService.showSnackbar(
-        message: 'AI recognition not yet implemented',
-      );
+      NotificationManager().showInfo('AI recognition not yet implemented');
       return null;
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'AI recognition error: ${e.toString()}',
-      );
+      NotificationManager().showError('AI recognition error: ${e.toString()}');
       return null;
     }
   }
@@ -50,14 +43,10 @@ class AiService {
   Future<List<Tool>> recognizeToolsFromImage(File imageFile) async {
     try {
       // TODO: Implement real AI tool recognition from image
-      _snackbarService.showSnackbar(
-        message: 'AI recognition not yet implemented',
-      );
+      NotificationManager().showInfo('AI recognition not yet implemented');
       return [];
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'AI recognition error: ${e.toString()}',
-      );
+      NotificationManager().showError('AI recognition error: ${e.toString()}');
       return [];
     }
   }

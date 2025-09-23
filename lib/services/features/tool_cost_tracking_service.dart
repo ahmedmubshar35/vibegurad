@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'dart:math' as math;
 
 import '../../models/tool/advanced_tool_models.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class ToolCostTrackingService {
@@ -167,17 +168,13 @@ class ToolCostTrackingService {
           .collection(_collection)
           .add(record.toJson());
 
-      _snackbarService.showSnackbar(
-        message: 'Cost record created successfully!',
-      );
+      NotificationManager().showSuccess('Cost record created successfully!');
       
       print('✅ Cost record created: ${record.costId}');
       return true;
     } catch (e) {
       print('❌ Error creating cost record: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to create cost record: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to create cost record: ${e.toString()}');
       return false;
     }
   }
@@ -190,17 +187,13 @@ class ToolCostTrackingService {
           .doc(recordId)
           .update(record.toJson());
 
-      _snackbarService.showSnackbar(
-        message: 'Cost record updated successfully!',
-      );
+      NotificationManager().showSuccess('Cost record updated successfully!');
       
       print('✅ Cost record updated: $recordId');
       return true;
     } catch (e) {
       print('❌ Error updating cost record: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to update cost record: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to update cost record: ${e.toString()}');
       return false;
     }
   }
@@ -216,17 +209,13 @@ class ToolCostTrackingService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Cost record deleted successfully!',
-      );
+      NotificationManager().showSuccess('Cost record deleted successfully!');
       
       print('✅ Cost record deleted (soft): $recordId');
       return true;
     } catch (e) {
       print('❌ Error deleting cost record: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to delete cost record: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to delete cost record: ${e.toString()}');
       return false;
     }
   }
@@ -243,17 +232,13 @@ class ToolCostTrackingService {
 
       await batch.commit();
 
-      _snackbarService.showSnackbar(
-        message: 'Bulk cost records created: ${records.length} items',
-      );
+      NotificationManager().showSuccess('Bulk cost records created: ${records.length} items');
       
       print('✅ Bulk cost records created: ${records.length} items');
       return true;
     } catch (e) {
       print('❌ Error bulk creating cost records: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to bulk create cost records: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to bulk create cost records: ${e.toString()}');
       return false;
     }
   }

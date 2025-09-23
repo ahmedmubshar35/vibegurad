@@ -6,6 +6,7 @@ import '../../../services/core/authentication_service.dart';
 import '../../../services/features/session_service.dart';
 import '../../../models/core/user.dart';
 import '../../../models/timer/timer_session.dart';
+import '../../../services/core/notification_manager.dart';
 
 class ProfileViewModel extends BaseViewModel {
   final _authService = locator<AuthenticationService>();
@@ -94,13 +95,13 @@ class ProfileViewModel extends BaseViewModel {
     try {
       // Validate input
       if (firstNameController.text.trim().isEmpty) {
-        _snackbarService.showSnackbar(message: 'First name is required');
+        NotificationManager().showWarning('First name is required');
         setBusy(false);
         return;
       }
 
       if (lastNameController.text.trim().isEmpty) {
-        _snackbarService.showSnackbar(message: 'Last name is required');
+        NotificationManager().showWarning('Last name is required');
         setBusy(false);
         return;
       }
@@ -110,9 +111,9 @@ class ProfileViewModel extends BaseViewModel {
       await Future.delayed(Duration(seconds: 1));
       
       _isEditing = false;
-      _snackbarService.showSnackbar(message: 'Profile updated successfully');
+      NotificationManager().showSuccess('Profile updated successfully');
     } catch (e) {
-      _snackbarService.showSnackbar(message: 'Error updating profile: $e');
+      NotificationManager().showError('Error updating profile: $e');
     } finally {
       setBusy(false);
       notifyListeners();

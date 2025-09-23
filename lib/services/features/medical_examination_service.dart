@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/health/health_profile.dart';
 import '../../models/health/lifetime_exposure.dart';
 import '../features/notification_service.dart';
+import '../core/notification_manager.dart';
 import '../../enums/exposure_level.dart';
 
 @lazySingleton
@@ -33,9 +34,7 @@ class MedicalExaminationService {
       _prefs = await SharedPreferences.getInstance();
       await _scheduleReminderChecks();
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to initialize medical examination service: $e',
-      );
+      NotificationManager().showError('Failed to initialize medical examination service: $e');
     }
   }
 
@@ -80,9 +79,7 @@ class MedicalExaminationService {
       return docRef.id;
 
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error scheduling medical examination: $e',
-      );
+      NotificationManager().showSuccess('Error scheduling medical examination: $e');
       return null;
     }
   }
@@ -148,14 +145,10 @@ class MedicalExaminationService {
         }
       }
 
-      _snackbarService.showSnackbar(
-        message: 'Medical examination completed successfully',
-      );
+      NotificationManager().showSuccess('Medical examination completed successfully');
 
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error completing medical examination: $e',
-      );
+      NotificationManager().showSuccess('Error completing medical examination: $e');
     }
   }
 
@@ -211,9 +204,7 @@ class MedicalExaminationService {
       return overdueWorkers;
 
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error retrieving overdue examinations: $e',
-      );
+      NotificationManager().showSuccess('Error retrieving overdue examinations: $e');
       return [];
     }
   }
@@ -351,9 +342,7 @@ class MedicalExaminationService {
       }
 
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error updating health profile from examination: $e',
-      );
+      NotificationManager().showSuccess('Error updating health profile from examination: $e');
     }
   }
 
@@ -374,9 +363,7 @@ class MedicalExaminationService {
       }
 
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error updating next exam date: $e',
-      );
+      NotificationManager().showSuccess('Error updating next exam date: $e');
     }
   }
 
@@ -471,9 +458,7 @@ class MedicalExaminationService {
       );
 
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error generating examination report: $e',
-      );
+      NotificationManager().showSuccess('Error generating examination report: $e');
       rethrow;
     }
   }

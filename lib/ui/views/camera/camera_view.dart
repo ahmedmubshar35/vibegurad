@@ -12,6 +12,12 @@ class CameraView extends StackedView<CameraViewModel> {
   const CameraView({super.key});
 
   @override
+  void onViewModelReady(CameraViewModel viewModel) {
+    super.onViewModelReady(viewModel);
+    viewModel.initialize();
+  }
+
+  @override
   Widget builder(BuildContext context, CameraViewModel viewModel, Widget? child) {
     return Scaffold(
       backgroundColor: Colors.black,
@@ -115,39 +121,103 @@ class CameraView extends StackedView<CameraViewModel> {
                     left: 20,
                     right: 20,
                     child: Container(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Colors.green.withValues(alpha: 0.9),
-                        borderRadius: BorderRadius.circular(12),
+                        color: Theme.of(context).colorScheme.primary.withOpacity(0.95),
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
                       ),
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(
-                            Icons.check_circle,
-                            color: Colors.white,
-                            size: 24,
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              viewModel.detectedTools.first.brand == 'Unknown' 
+                                  ? Icons.lightbulb_outline
+                                  : Icons.check_circle,
+                              color: Colors.white,
+                              size: 28,
+                            ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 12),
                           Text(
-                            'Tool Recognized!',
-                            style: const TextStyle(
+                            viewModel.detectedTools.first.brand == 'Unknown' 
+                                ? 'Tool Suggested!' 
+                                : 'Tool Recognized!',
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 16,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 6),
                           Text(
                             viewModel.detectedTools.first.name,
-                            style: const TextStyle(
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               color: Colors.white,
-                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
                             ),
+                          ),
+                          if (viewModel.detectedTools.first.brand == 'Unknown') ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              'Based on detected objects',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Colors.white.withOpacity(0.8),
+                              ),
+                            ),
+                          ],
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton.icon(
+                                  onPressed: () => viewModel.selectTool(viewModel.detectedTools.first),
+                                  icon: const Icon(Icons.play_arrow, size: 18),
+                                  label: const Text('Start Session'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    foregroundColor: Theme.of(context).colorScheme.primary,
+                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: OutlinedButton.icon(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.close, size: 18),
+                                  label: const Text('Cancel'),
+                                  style: OutlinedButton.styleFrom(
+                                    foregroundColor: Colors.white,
+                                    side: const BorderSide(color: Colors.white, width: 1.5),
+                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ),
                   ),
+
 
                 // Multi-angle capture instruction overlay
                 if (viewModel.isCapturingMultipleAngles)
@@ -158,7 +228,7 @@ class CameraView extends StackedView<CameraViewModel> {
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.purple.withValues(alpha: 0.9),
+                        color: Colors.purple.withOpacity(0.9),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
@@ -195,7 +265,7 @@ class CameraView extends StackedView<CameraViewModel> {
                           const SizedBox(height: 8),
                           LinearProgressIndicator(
                             value: viewModel.currentAngleIndex / viewModel.totalAnglesNeeded,
-                            backgroundColor: Colors.white.withValues(alpha: 0.3),
+                            backgroundColor: Colors.white.withOpacity(0.3),
                             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
                         ],
@@ -212,9 +282,9 @@ class CameraView extends StackedView<CameraViewModel> {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: viewModel.isContinuousDetectionRunning 
-                            ? Colors.blue.withValues(alpha: 0.9)
+                            ? Colors.blue.withOpacity(0.9)
                             : viewModel.isMultiAngleCaptureMode
-                                ? Colors.purple.withValues(alpha: 0.7)
+                                ? Colors.purple.withOpacity(0.7)
                                 : Colors.black54,
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -256,29 +326,36 @@ class CameraView extends StackedView<CameraViewModel> {
                             ),
                             textAlign: TextAlign.center,
                           ),
-                          if (viewModel.isContinuousDetectionRunning && viewModel.autoStartTimerEnabled)
-                            const Padding(
-                              padding: EdgeInsets.only(top: 4),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.timer,
-                                    color: Colors.green,
-                                    size: 16,
-                                  ),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    'Auto-timer enabled',
+                          // Auto-timer status
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  viewModel.autoStartTimerEnabled ? Icons.timer : Icons.timer_off,
+                                  color: viewModel.autoStartTimerEnabled ? Colors.green : Colors.grey,
+                                  size: 16,
+                                ),
+                                const SizedBox(width: 4),
+                                GestureDetector(
+                                  onTap: viewModel.toggleAutoStartTimer,
+                                  child: Text(
+                                    viewModel.autoStartTimerEnabled 
+                                        ? 'Auto-start enabled' 
+                                        : 'Tap to enable auto-start',
                                     style: TextStyle(
-                                      color: Colors.greenAccent,
+                                      color: viewModel.autoStartTimerEnabled 
+                                          ? Colors.greenAccent 
+                                          : Colors.grey,
                                       fontSize: 11,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
+                          ),
                           if (viewModel.isMultiAngleCaptureMode && !viewModel.isContinuousDetectionRunning)
                             const Padding(
                               padding: EdgeInsets.only(top: 8),
@@ -320,8 +397,8 @@ class CameraView extends StackedView<CameraViewModel> {
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          Colors.black.withValues(alpha: 0.7),
-                          Colors.black.withValues(alpha: 0.9),
+                          Colors.black.withOpacity(0.7),
+                          Colors.black.withOpacity(0.9),
                         ],
                       ),
                     ),
@@ -485,7 +562,7 @@ class CameraView extends StackedView<CameraViewModel> {
                                     height: 60,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: Colors.black.withValues(alpha: 0.6),
+                                      color: Colors.black.withOpacity(0.6),
                                       border: Border.all(
                                         color: Colors.white,
                                         width: 3,
@@ -580,7 +657,7 @@ class CameraView extends StackedView<CameraViewModel> {
                                     vertical: 8,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.green.withValues(alpha: 0.2),
+                                    color: Colors.green.withOpacity(0.2),
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(color: Colors.green),
                                   ),
@@ -649,10 +726,6 @@ class CameraView extends StackedView<CameraViewModel> {
   @override
   CameraViewModel viewModelBuilder(BuildContext context) => CameraViewModel();
 
-  @override
-  void onViewModelReady(CameraViewModel viewModel) {
-    viewModel.initialize();
-  }
 
   @override
   bool get reactive => true;
@@ -679,11 +752,169 @@ class CameraView extends StackedView<CameraViewModel> {
       ),
     );
   }
+
+  // Show quick start options
+  void _showQuickStartOptions(BuildContext context, CameraViewModel viewModel) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Handle
+            Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(top: 12, bottom: 20),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.outline,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            
+            // Title
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.flash_on, 
+                    size: 24,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    'Quick Start Options',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            
+            const SizedBox(height: 20),
+            
+            // Quick start options
+            ListTile(
+              leading: Icon(
+                Icons.build,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              title: Text(
+                'Start with Drill',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              subtitle: Text(
+                'Most common construction tool',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                _showManualToolSelection(context, viewModel);
+              },
+            ),
+            
+            ListTile(
+              leading: Icon(
+                Icons.handyman,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              title: Text(
+                'Start with Hammer',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              subtitle: Text(
+                'Basic hand tool for construction',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                _showManualToolSelection(context, viewModel);
+              },
+            ),
+            
+            ListTile(
+              leading: Icon(
+                Icons.content_cut,
+                color: Theme.of(context).colorScheme.error,
+              ),
+              title: Text(
+                'Start with Saw',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              subtitle: Text(
+                'Cutting tool for wood and materials',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                _showManualToolSelection(context, viewModel);
+              },
+            ),
+
+            const SizedBox(height: 20),
+
+            // Cancel button
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    side: BorderSide(
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
   
   // Show QR scanner
   void _showQRScanner(BuildContext context, CameraViewModel viewModel) {
     final qrService = GetIt.instance<QRScannerService>();
-    
+
+    // Open scanner directly without permission checks
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => QRScannerOverlay(
@@ -707,9 +938,9 @@ class CameraView extends StackedView<CameraViewModel> {
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
           ),
@@ -723,22 +954,26 @@ class CameraView extends StackedView<CameraViewModel> {
               height: 4,
               margin: const EdgeInsets.only(top: 12, bottom: 20),
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: Theme.of(context).colorScheme.outline,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
             
             // Title
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: [
-                  Icon(Icons.camera_alt, size: 24),
-                  SizedBox(width: 12),
+                  Icon(
+                    Icons.camera_alt, 
+                    size: 24,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(width: 12),
                   Text(
                     'Camera Options',
-                    style: TextStyle(
-                      fontSize: 20,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -750,8 +985,16 @@ class CameraView extends StackedView<CameraViewModel> {
             
             // Options
             ListTile(
-              leading: Icon(viewModel.getFlashIcon()),
-              title: const Text('Toggle Flash'),
+              leading: Icon(
+                viewModel.getFlashIcon(),
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+              title: Text(
+                'Toggle Flash',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
               onTap: () {
                 viewModel.toggleFlash();
                 Navigator.pop(context);
@@ -760,8 +1003,16 @@ class CameraView extends StackedView<CameraViewModel> {
             
             if (viewModel.canSwitchCamera)
               ListTile(
-                leading: const Icon(Icons.flip_camera_ios),
-                title: const Text('Switch Camera'),
+                leading: Icon(
+                  Icons.flip_camera_ios,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+                title: Text(
+                  'Switch Camera',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
                 onTap: () {
                   viewModel.switchCamera();
                   Navigator.pop(context);
@@ -774,13 +1025,16 @@ class CameraView extends StackedView<CameraViewModel> {
                     ? Icons.pause_circle_filled
                     : Icons.play_circle_filled,
                 color: viewModel.isContinuousDetectionRunning 
-                    ? Colors.orange 
-                    : Colors.green,
+                    ? Theme.of(context).colorScheme.error
+                    : Theme.of(context).colorScheme.primary,
               ),
               title: Text(
                 viewModel.isContinuousDetectionRunning 
                     ? 'Stop Continuous Detection' 
                     : 'Start Continuous Detection',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
               onTap: () {
                 viewModel.toggleContinuousDetection();
@@ -793,16 +1047,23 @@ class CameraView extends StackedView<CameraViewModel> {
                 viewModel.autoStartTimerEnabled 
                     ? Icons.timer 
                     : Icons.timer_off,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               title: Text(
                 viewModel.autoStartTimerEnabled 
                     ? 'Disable Auto-Timer' 
                     : 'Enable Auto-Timer',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
               subtitle: Text(
                 viewModel.autoStartTimerEnabled 
                     ? 'Sessions start automatically when tools are detected'
                     : 'Manually start sessions after tool detection',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
               onTap: () {
                 viewModel.toggleAutoStartTimer();
@@ -816,18 +1077,24 @@ class CameraView extends StackedView<CameraViewModel> {
                     ? Icons.photo_camera_back
                     : Icons.photo_camera,
                 color: viewModel.isMultiAngleCaptureMode 
-                    ? Colors.purple 
-                    : Colors.blue,
+                    ? Theme.of(context).colorScheme.secondary
+                    : Theme.of(context).colorScheme.primary,
               ),
               title: Text(
                 viewModel.isMultiAngleCaptureMode 
                     ? 'Disable Multi-Angle Mode' 
                     : 'Enable Multi-Angle Mode',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
               subtitle: Text(
                 viewModel.isMultiAngleCaptureMode 
                     ? 'Take photos from 3 different angles for 95%+ accuracy'
                     : 'Use advanced AI with multiple angles for better recognition',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
               onTap: () {
                 viewModel.toggleMultiAngleCaptureMode();

@@ -1,16 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
-import 'package:stacked_services/stacked_services.dart';
-import 'package:get_it/get_it.dart';
 
 import '../../models/tool/tool.dart';
 import '../../config/firebase_config.dart';
 import '../../enums/tool_type.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class ToolService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  SnackbarService get _snackbarService => GetIt.instance<SnackbarService>();
 
   // Get tools for a specific company
   Stream<List<Tool>> getCompanyTools(String companyId) {
@@ -92,18 +90,14 @@ class ToolService {
           .add(tool.toFirestore());
 
       if (showMessage) {
-        _snackbarService.showSnackbar(
-          message: 'Tool "${tool.name}" added successfully!',
-        );
+        NotificationManager().showSuccess('Tool "${tool.name}" added successfully!');
       }
       
       print('✅ Tool added with ID: ${docRef.id}');
       return true;
     } catch (e) {
       print('❌ Error adding tool: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to add tool: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to add tool: ${e.toString()}');
       return false;
     }
   }
@@ -116,17 +110,13 @@ class ToolService {
           .doc(toolId)
           .update(tool.toFirestore());
 
-      _snackbarService.showSnackbar(
-        message: 'Tool "${tool.name}" updated successfully!',
-      );
+      NotificationManager().showSuccess('Tool "${tool.name}" updated successfully!');
       
       print('✅ Tool updated: $toolId');
       return true;
     } catch (e) {
       print('❌ Error updating tool: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to update tool: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to update tool: ${e.toString()}');
       return false;
     }
   }
@@ -142,17 +132,13 @@ class ToolService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Tool deleted successfully!',
-      );
+      NotificationManager().showSuccess('Tool deleted successfully!');
       
       print('✅ Tool deleted (soft): $toolId');
       return true;
     } catch (e) {
       print('❌ Error deleting tool: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to delete tool: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to delete tool: ${e.toString()}');
       return false;
     }
   }
@@ -168,17 +154,13 @@ class ToolService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Tool assigned successfully!',
-      );
+      NotificationManager().showSuccess('Tool assigned successfully!');
       
       print('✅ Tool assigned: $toolId to worker: $workerId');
       return true;
     } catch (e) {
       print('❌ Error assigning tool: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to assign tool: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to assign tool: ${e.toString()}');
       return false;
     }
   }
@@ -194,17 +176,13 @@ class ToolService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Tool unassigned successfully!',
-      );
+      NotificationManager().showSuccess('Tool unassigned successfully!');
       
       print('✅ Tool unassigned: $toolId');
       return true;
     } catch (e) {
       print('❌ Error unassigning tool: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to unassign tool: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to unassign tool: ${e.toString()}');
       return false;
     }
   }
@@ -268,17 +246,13 @@ class ToolService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Maintenance date updated successfully!',
-      );
+      NotificationManager().showSuccess('Maintenance date updated successfully!');
       
       print('✅ Maintenance date updated for tool: $toolId');
       return true;
     } catch (e) {
       print('❌ Error updating maintenance date: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to update maintenance date: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to update maintenance date: ${e.toString()}');
       return false;
     }
   }

@@ -4,6 +4,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../app/app.locator.dart';
 import '../../../services/features/feedback_service.dart';
+import '../../../services/core/notification_manager.dart';
 
 class FeedbackViewModel extends BaseViewModel {
   final _feedbackService = locator<FeedbackService>();
@@ -49,9 +50,7 @@ class FeedbackViewModel extends BaseViewModel {
         notifyListeners();
       }
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to take screenshot: $e',
-      );
+      NotificationManager().showError('Failed to take screenshot: $e');
     }
   }
   
@@ -69,9 +68,7 @@ class FeedbackViewModel extends BaseViewModel {
         notifyListeners();
       }
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to select image: $e',
-      );
+      NotificationManager().showError('Failed to select image: $e');
     }
   }
   
@@ -97,19 +94,13 @@ class FeedbackViewModel extends BaseViewModel {
       );
       
       if (success) {
-        _snackbarService.showSnackbar(
-          message: 'Thank you for your feedback! We\'ll review it soon.',
-        );
+        NotificationManager().showSuccess('Thank you for your feedback! We\'ll review it soon.');
         _navigationService.back();
       } else {
-        _snackbarService.showSnackbar(
-          message: 'Failed to submit feedback. Please try again.',
-        );
+        NotificationManager().showError('Failed to submit feedback. Please try again.');
       }
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error submitting feedback: $e',
-      );
+      NotificationManager().showError('Error submitting feedback: $e');
     } finally {
       setBusy(false);
     }

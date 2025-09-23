@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/tool/advanced_tool_models.dart';
 import '../../config/firebase_config.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class ToolCheckoutService {
@@ -173,17 +174,13 @@ class ToolCheckoutService {
           .collection(_collection)
           .add(checkout.toJson());
 
-      _snackbarService.showSnackbar(
-        message: 'Tool checked out to $workerName successfully!',
-      );
+      NotificationManager().showSuccess('Tool checked out to $workerName successfully!');
       
       print('✅ Tool checked out: $toolId to $workerName');
       return true;
     } catch (e) {
       print('❌ Error checking out tool: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to check out tool: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to check out tool: ${e.toString()}');
       return false;
     }
   }
@@ -221,17 +218,13 @@ class ToolCheckoutService {
         'updatedAt': Timestamp.fromDate(DateTime.now()),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Tool checked in successfully!',
-      );
+      NotificationManager().showSuccess('Tool checked in successfully!');
       
       print('✅ Tool checked in: ${checkout.toolId}');
       return true;
     } catch (e) {
       print('❌ Error checking in tool: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to check in tool: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to check in tool: ${e.toString()}');
       return false;
     }
   }
@@ -267,17 +260,13 @@ class ToolCheckoutService {
         'updatedAt': Timestamp.fromDate(DateTime.now()),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Tool marked as lost',
-      );
+      NotificationManager().showSuccess('Tool marked as lost');
       
       print('✅ Tool marked as lost: $checkoutId');
       return true;
     } catch (e) {
       print('❌ Error marking tool as lost: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to mark tool as lost: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to mark tool as lost: ${e.toString()}');
       return false;
     }
   }
@@ -293,17 +282,13 @@ class ToolCheckoutService {
         'updatedAt': Timestamp.fromDate(DateTime.now()),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Checkout extended successfully!',
-      );
+      NotificationManager().showSuccess('Checkout extended successfully!');
       
       print('✅ Checkout extended: $checkoutId');
       return true;
     } catch (e) {
       print('❌ Error extending checkout: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to extend checkout: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to extend checkout: ${e.toString()}');
       return false;
     }
   }
@@ -465,17 +450,13 @@ class ToolCheckoutService {
 
       await batch.commit();
 
-      _snackbarService.showSnackbar(
-        message: 'Bulk check-in completed for ${checkoutIds.length} tools!',
-      );
+      NotificationManager().showSuccess('Bulk check-in completed for ${checkoutIds.length} tools!');
       
       print('✅ Bulk check-in completed: ${checkoutIds.length} tools');
       return true;
     } catch (e) {
       print('❌ Error bulk checking in tools: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to bulk check-in tools: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to bulk check-in tools: ${e.toString()}');
       return false;
     }
   }

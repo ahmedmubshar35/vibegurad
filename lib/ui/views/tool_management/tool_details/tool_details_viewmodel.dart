@@ -9,6 +9,7 @@ import '../../../../models/tool/tool.dart';
 import '../../../../models/timer/timer_session.dart';
 import '../../../../models/core/user.dart';
 import '../../../../app/app.router.dart';
+import '../../../../services/core/notification_manager.dart';
 
 class ToolDetailsViewModel extends BaseViewModel {
   final _authService = locator<AuthenticationService>();
@@ -77,10 +78,7 @@ class ToolDetailsViewModel extends BaseViewModel {
       }
     } catch (e) {
       print('Error loading tool details: $e');
-      _snackbarService.showSnackbar(
-        message: 'Error loading tool details: $e',
-        duration: const Duration(seconds: 3),
-      );
+      NotificationManager().showError('Error loading tool details: $e');
     } finally {
       setBusy(false);
     }
@@ -139,10 +137,7 @@ class ToolDetailsViewModel extends BaseViewModel {
   // Editing methods
   void toggleEditing() {
     if (!canEdit) {
-      _snackbarService.showSnackbar(
-        message: 'Only managers can edit tool details',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showWarning('Only managers can edit tool details');
       return;
     }
     
@@ -161,18 +156,12 @@ class ToolDetailsViewModel extends BaseViewModel {
     
     // Validate input
     if (displayNameController.text.trim().isEmpty) {
-      _snackbarService.showSnackbar(
-        message: 'Display name is required',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showWarning('Display name is required');
       return;
     }
     
     if (brandController.text.trim().isEmpty) {
-      _snackbarService.showSnackbar(
-        message: 'Brand is required',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showWarning('Brand is required');
       return;
     }
     
@@ -193,15 +182,9 @@ class ToolDetailsViewModel extends BaseViewModel {
       _tool = updatedTool;
       _isEditing = false;
       
-      _snackbarService.showSnackbar(
-        message: 'Tool updated successfully',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showSuccess('Tool updated successfully');
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error updating tool: $e',
-        duration: const Duration(seconds: 3),
-      );
+      NotificationManager().showError('Error updating tool: $e');
     } finally {
       setBusy(false);
       notifyListeners();
@@ -221,15 +204,9 @@ class ToolDetailsViewModel extends BaseViewModel {
       
       _tool = _tool!.copyWith(isToolActive: newAvailability);
       
-      _snackbarService.showSnackbar(
-        message: 'Tool ${newAvailability ? 'enabled' : 'disabled'} successfully',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showSuccess('Tool ${newAvailability ? 'enabled' : 'disabled'} successfully');
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error updating availability: $e',
-        duration: const Duration(seconds: 3),
-      );
+      NotificationManager().showError('Error updating availability: $e');
     } finally {
       setBusy(false);
       notifyListeners();
@@ -248,15 +225,9 @@ class ToolDetailsViewModel extends BaseViewModel {
       
       _tool = _tool!.copyWith(nextMaintenanceDate: nextMaintenance);
       
-      _snackbarService.showSnackbar(
-        message: 'Maintenance scheduled successfully',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showSuccess('Maintenance scheduled successfully');
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error scheduling maintenance: $e',
-        duration: const Duration(seconds: 3),
-      );
+      NotificationManager().showError('Error scheduling maintenance: $e');
     } finally {
       setBusy(false);
       notifyListeners();
@@ -281,18 +252,12 @@ class ToolDetailsViewModel extends BaseViewModel {
         lastMaintenanceDate: DateTime.now(),
       );
       
-      _snackbarService.showSnackbar(
-        message: 'Maintenance completed successfully',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showSuccess('Maintenance completed successfully');
       
       // Refresh stats
       await _loadToolStats();
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error completing maintenance: $e',
-        duration: const Duration(seconds: 3),
-      );
+      NotificationManager().showError('Error completing maintenance: $e');
     } finally {
       setBusy(false);
       notifyListeners();
@@ -307,18 +272,12 @@ class ToolDetailsViewModel extends BaseViewModel {
     try {
       await _toolService.deleteTool(_tool!.id!);
       
-      _snackbarService.showSnackbar(
-        message: 'Tool deleted successfully',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showSuccess('Tool deleted successfully');
       
       // Navigate back
       _navigationService.back();
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error deleting tool: $e',
-        duration: const Duration(seconds: 3),
-      );
+      NotificationManager().showError('Error deleting tool: $e');
     } finally {
       setBusy(false);
     }
@@ -327,34 +286,22 @@ class ToolDetailsViewModel extends BaseViewModel {
   // Session management
   Future<void> startTimerSession() async {
     if (!canStartSession || _tool == null) {
-      _snackbarService.showSnackbar(
-        message: canStartSession ? 'Tool is not available' : 'Cannot start session with this tool',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showWarning(canStartSession ? 'Tool is not available' : 'Cannot start session with this tool');
       return;
     }
     
     // TODO: Implement timer navigation when route arguments are available
-    _snackbarService.showSnackbar(
-      message: 'Timer session navigation coming soon',
-      duration: const Duration(seconds: 2),
-    );
+    NotificationManager().showInfo('Timer session navigation coming soon');
   }
 
   void viewSessionHistory() {
     // TODO: Implement history navigation when route arguments are available
-    _snackbarService.showSnackbar(
-      message: 'Session history navigation coming soon',
-      duration: const Duration(seconds: 2),
-    );
+    NotificationManager().showInfo('Session history navigation coming soon');
   }
 
   void navigateToSessionDetails(TimerSession session) {
     // TODO: Implement session details navigation when route is available
-    _snackbarService.showSnackbar(
-      message: 'Session details navigation coming soon', 
-      duration: const Duration(seconds: 2),
-    );
+    NotificationManager().showInfo('Session details navigation coming soon');
   }
 
   // Utility methods

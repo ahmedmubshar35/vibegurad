@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import '../../../../services/core/authentication_service.dart';
 import '../../../../app/app.router.dart';
 import '../../../../enums/user_role.dart';
+import '../../../../services/core/notification_manager.dart';
 
 class RegisterViewModel extends FormViewModel {
   final AuthenticationService _authService = GetIt.instance<AuthenticationService>();
@@ -145,9 +146,7 @@ class RegisterViewModel extends FormViewModel {
     }
 
     if (!_agreeToTerms) {
-      _snackbarService.showSnackbar(
-        message: 'Please agree to the Terms of Service and Privacy Policy',
-      );
+      NotificationManager().showWarning('Please agree to the Terms of Service and Privacy Policy');
       return;
     }
 
@@ -181,9 +180,7 @@ class RegisterViewModel extends FormViewModel {
 
   // Sign up with Google
   Future<void> signUpWithGoogle() async {
-    _snackbarService.showSnackbar(
-      message: 'Google sign-in is not available in this version.',
-    );
+    NotificationManager().showInfo('Google sign-in is not available in this version.');
   }
 
   // Get role display name

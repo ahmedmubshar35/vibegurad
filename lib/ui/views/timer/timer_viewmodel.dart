@@ -12,6 +12,7 @@ import '../../../models/timer/timer_session.dart';
 import '../../../models/tool/tool.dart';
 import '../../../enums/timer_status.dart';
 import '../../../enums/exposure_level.dart';
+import '../../../services/core/notification_manager.dart';
 import '../../../app/app.router.dart';
 
 class TimerViewModel extends ReactiveViewModel {
@@ -198,10 +199,7 @@ class TimerViewModel extends ReactiveViewModel {
     
     await pauseSession();
     
-    _snackbarService.showSnackbar(
-      message: 'Rest break started. Take at least 10 minutes off from vibrating tools.',
-      duration: const Duration(seconds: 4),
-    );
+    NotificationManager().showInfo('Rest break started. Take at least 10 minutes off from vibrating tools.');
   }
 
   // Navigate to camera for tool recognition
@@ -217,7 +215,7 @@ class TimerViewModel extends ReactiveViewModel {
       // Get company tools
       final currentUser = _authService.currentUser;
       if (currentUser?.companyId == null) {
-        _snackbarService.showSnackbar(message: 'No company tools available');
+        NotificationManager().showWarning('No company tools available');
         setBusy(false);
         return;
       }
@@ -226,7 +224,7 @@ class TimerViewModel extends ReactiveViewModel {
       final tools = await toolsStream.first;
       
       if (tools.isEmpty) {
-        _snackbarService.showSnackbar(message: 'No tools found for your company');
+        NotificationManager().showWarning('No tools found for your company');
         setBusy(false);
         return;
       }
@@ -238,16 +236,13 @@ class TimerViewModel extends ReactiveViewModel {
       
     } catch (e) {
       setBusy(false);
-      _snackbarService.showSnackbar(message: 'Error loading tools: $e');
+      NotificationManager().showError('Error loading tools: $e');
     }
   }
   
   void _showToolSelectionDialog(List tools) {
     // For now, show a message that tools are available and navigate to tool management
-    _snackbarService.showSnackbar(
-      message: 'Found ${tools.length} tools. Tool selection dialog will be implemented.',
-      duration: const Duration(seconds: 3),
-    );
+    NotificationManager().showInfo('Found ${tools.length} tools. Tool selection dialog will be implemented.');
     
     // TODO: Implement custom tool selection dialog
     // For now, just use the first available tool as demonstration

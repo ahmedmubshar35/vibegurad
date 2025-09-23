@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:injectable/injectable.dart';
 import 'package:stacked/stacked.dart';
-import 'package:stacked_services/stacked_services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:get_it/get_it.dart';
 import 'package:vibration/vibration.dart';
@@ -10,10 +9,10 @@ import '../../models/tool/tool.dart';
 import 'tool_service.dart';
 import 'timer_service.dart';
 import '../core/authentication_service.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class QRScannerService with ListenableServiceMixin {
-  final SnackbarService _snackbarService = GetIt.instance<SnackbarService>();
   final ToolService _toolService = GetIt.instance<ToolService>();
   final TimerService _timerService = GetIt.instance<TimerService>();
   final AuthenticationService _authService = GetIt.instance<AuthenticationService>();
@@ -68,9 +67,7 @@ class QRScannerService with ListenableServiceMixin {
       // Start scanning
       await startScanning();
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to initialize QR scanner: $e',
-      );
+      NotificationManager().showError('Failed to initialize QR scanner: $e');
     }
   }
   
@@ -150,26 +147,18 @@ class QRScannerService with ListenableServiceMixin {
         _scannedTool.value = tool;
         _scannedToolController.add(tool);
         
-        _snackbarService.showSnackbar(
-          message: '✅ Scanned ($scanType): ${tool.displayName}',
-          duration: const Duration(seconds: 2),
-        );
+        NotificationManager().showSuccess('✅ Scanned ($scanType): ${tool.displayName}');
         
         // Auto-start timer if enabled
         await _handleAutoTimerStart(tool);
       } else {
-        _snackbarService.showSnackbar(
-          message: '❌ Tool not found for $scanType: $code',
-          duration: const Duration(seconds: 3),
-        );
+        NotificationManager().showError('❌ Tool not found for $scanType: $code');
         
         // Attempt to create new tool entry
         await _handleUnknownCode(code, barcodeType);
       }
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error processing QR code: $e',
-      );
+      NotificationManager().showError('Error processing QR code: $e');
     }
   }
   
@@ -330,10 +319,7 @@ class QRScannerService with ListenableServiceMixin {
   Future<void> _handleUnknownCode(String code, BarcodeType barcodeType) async {
     final scanType = _getScanTypeMessage(barcodeType);
     
-    _snackbarService.showSnackbar(
-      message: 'Unknown $scanType. Register this tool in tool management.',
-      duration: const Duration(seconds: 4),
-    );
+    NotificationManager().showWarning('Unknown $scanType. Register this tool in tool management.');
     
     // Could implement automatic tool registration here
     // For now, we'll just log it for manual registration
@@ -345,18 +331,13 @@ class QRScannerService with ListenableServiceMixin {
     try {
       // Check if timer service is available
       if (_timerService.currentSession != null) {
-        _snackbarService.showSnackbar(
-          message: 'Session already active with ${_timerService.currentSession!.tool?.displayName ?? 'another tool'}',
-          duration: const Duration(seconds: 3),
-        );
+        NotificationManager().showWarning('Session already active with ${_timerService.currentSession!.tool?.displayName ?? 'another tool'}');
         return;
       }
       
       // Check if user is authenticated
       if (_authService.currentUser == null) {
-        _snackbarService.showSnackbar(
-          message: 'Please log in to start a session',
-        );
+        NotificationManager().showWarning('Please log in to start a session');
         return;
       }
       
@@ -364,22 +345,15 @@ class QRScannerService with ListenableServiceMixin {
       final success = await _timerService.startSession(tool);
       
       if (success) {
-        _snackbarService.showSnackbar(
-          message: '⏱️ Timer started for ${tool.displayName}',
-          duration: const Duration(seconds: 3),
-        );
+        NotificationManager().showSuccess('⏱️ Timer started for ${tool.displayName}');
         
         // Provide additional feedback
         _provideSuccessFeedback();
       } else {
-        _snackbarService.showSnackbar(
-          message: 'Failed to start timer session',
-        );
+        NotificationManager().showError('Failed to start timer session');
       }
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Error starting timer: $e',
-      );
+      NotificationManager().showError('Error starting timer: $e');
     }
   }
   

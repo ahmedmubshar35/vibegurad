@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get_it/get_it.dart';
 import 'authentication_service.dart';
 import '../../app/app.router.dart';
+import 'notification_manager.dart';
 
 @lazySingleton
 class AuthSessionService with ListenableServiceMixin {
@@ -79,10 +80,7 @@ class AuthSessionService with ListenableServiceMixin {
     // Sign out the user
     await _authService.signOut();
     
-    _snackbarService.showSnackbar(
-      message: 'Your session has expired. Please log in again.',
-      duration: const Duration(seconds: 5),
-    );
+    NotificationManager().showWarning('Your session has expired. Please log in again.');
     
     // Navigate to login
     await _navigationService.clearStackAndShow(Routes.loginView);
@@ -90,10 +88,7 @@ class AuthSessionService with ListenableServiceMixin {
   
   // Show timeout warning
   void _showTimeoutWarning() {
-    _snackbarService.showSnackbar(
-      message: 'Your session will expire in 5 minutes due to inactivity. Tap to stay logged in.',
-      duration: const Duration(seconds: 10),
-    );
+    NotificationManager().showWarning('Your session will expire in 5 minutes due to inactivity. Tap to stay logged in.');
   }
   
   // App lifecycle handlers
@@ -111,10 +106,7 @@ class AuthSessionService with ListenableServiceMixin {
   // Extend session manually
   void extendSession() {
     updateActivity();
-    _snackbarService.showSnackbar(
-      message: 'Session extended for another $_sessionTimeoutMinutes minutes',
-      duration: const Duration(seconds: 2),
-    );
+    NotificationManager().showInfo('Session extended for another $_sessionTimeoutMinutes minutes');
   }
   
   // Save last activity to persistent storage
@@ -177,9 +169,7 @@ class AuthSessionService with ListenableServiceMixin {
   Future<void> configureTimeout(int minutes) async {
     // This could be saved to user preferences
     // For now, we'll keep it simple
-    _snackbarService.showSnackbar(
-      message: 'Session timeout updated to $minutes minutes',
-    );
+    NotificationManager().showInfo('Session timeout updated to $minutes minutes');
   }
   
   // Clean up

@@ -11,6 +11,7 @@ class HomeView extends StackedView<HomeViewModel> {
   void onViewModelReady(HomeViewModel viewModel) {
     super.onViewModelReady(viewModel);
     viewModel.initializeIfNeeded();
+    // Removed camera permission check - handled once at app startup
   }
 
   @override
@@ -21,11 +22,10 @@ class HomeView extends StackedView<HomeViewModel> {
         title: Row(
           children: [
             // App Logo
-            Image.asset(
-              'assets/images/App_logo.png',
-              height: 32,
-              width: 32,
-              fit: BoxFit.contain,
+            const Icon(
+              Icons.security,
+              size: 32,
+              color: Colors.white,
             ),
             const SizedBox(width: 8),
             const Text('VibeGuard'),

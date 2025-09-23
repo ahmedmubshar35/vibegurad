@@ -4,6 +4,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/tool/advanced_tool_models.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class ToolServiceHistoryService {
@@ -202,17 +203,13 @@ class ToolServiceHistoryService {
           .collection(_collection)
           .add(record.toJson());
 
-      _snackbarService.showSnackbar(
-        message: 'Service record created successfully!',
-      );
+      NotificationManager().showSuccess('Service record created successfully!');
       
       print('✅ Service record created: ${record.serviceId}');
       return true;
     } catch (e) {
       print('❌ Error creating service record: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to create service record: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to create service record: ${e.toString()}');
       return false;
     }
   }
@@ -225,17 +222,13 @@ class ToolServiceHistoryService {
           .doc(recordId)
           .update(record.toJson());
 
-      _snackbarService.showSnackbar(
-        message: 'Service record updated successfully!',
-      );
+      NotificationManager().showSuccess('Service record updated successfully!');
       
       print('✅ Service record updated: $recordId');
       return true;
     } catch (e) {
       print('❌ Error updating service record: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to update service record: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to update service record: ${e.toString()}');
       return false;
     }
   }
@@ -253,17 +246,13 @@ class ToolServiceHistoryService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Service started!',
-      );
+      NotificationManager().showSuccess('Service started!');
       
       print('✅ Service started: $recordId');
       return true;
     } catch (e) {
       print('❌ Error starting service: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to start service: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to start service: ${e.toString()}');
       return false;
     }
   }
@@ -296,17 +285,13 @@ class ToolServiceHistoryService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Service completed successfully!',
-      );
+      NotificationManager().showSuccess('Service completed successfully!');
       
       print('✅ Service completed: $recordId');
       return true;
     } catch (e) {
       print('❌ Error completing service: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to complete service: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to complete service: ${e.toString()}');
       return false;
     }
   }
@@ -323,17 +308,13 @@ class ToolServiceHistoryService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Service cancelled',
-      );
+      NotificationManager().showInfo('Service cancelled');
       
       print('✅ Service cancelled: $recordId');
       return true;
     } catch (e) {
       print('❌ Error cancelling service: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to cancel service: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to cancel service: ${e.toString()}');
       return false;
     }
   }
@@ -350,17 +331,13 @@ class ToolServiceHistoryService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Service rescheduled!',
-      );
+      NotificationManager().showSuccess('Service rescheduled!');
       
       print('✅ Service rescheduled: $recordId');
       return true;
     } catch (e) {
       print('❌ Error rescheduling service: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to reschedule service: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to reschedule service: ${e.toString()}');
       return false;
     }
   }
@@ -375,9 +352,7 @@ class ToolServiceHistoryService {
     try {
       final previousRecord = await getServiceRecord(previousRecordId);
       if (previousRecord == null) {
-        _snackbarService.showSnackbar(
-          message: 'Previous service record not found',
-        );
+        NotificationManager().showWarning('Previous service record not found');
         return false;
       }
 
@@ -392,9 +367,7 @@ class ToolServiceHistoryService {
       );
     } catch (e) {
       print('❌ Error scheduling next service: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to schedule next service: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to schedule next service: ${e.toString()}');
       return false;
     }
   }
@@ -661,17 +634,13 @@ class ToolServiceHistoryService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Service record deleted successfully!',
-      );
+      NotificationManager().showSuccess('Service record deleted successfully!');
       
       print('✅ Service record deleted (soft): $recordId');
       return true;
     } catch (e) {
       print('❌ Error deleting service record: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to delete service record: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to delete service record: ${e.toString()}');
       return false;
     }
   }

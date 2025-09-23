@@ -9,6 +9,7 @@ import '../../models/core/user.dart' as app_user;
 import '../../enums/user_role.dart';
 import '../../config/firebase_config.dart';
 import '../features/timer_service.dart';
+import 'notification_manager.dart';
 
 @lazySingleton
 class AuthenticationService with ListenableServiceMixin {
@@ -220,10 +221,7 @@ class AuthenticationService with ListenableServiceMixin {
       // Set current user
       _currentUser.value = user;
 
-      _snackbarService.showSnackbar(
-        message: 'Account created successfully!',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showSuccess('Account created successfully!');
 
       return true;
     } on FirebaseAuthException catch (e) {
@@ -232,9 +230,7 @@ class AuthenticationService with ListenableServiceMixin {
       return false;
     } catch (e) {
       print('❌ Registration Error: ${e.toString()}');
-      _snackbarService.showSnackbar(
-        message: 'Registration failed: ${e.toString()}',
-      );
+      NotificationManager().showError('Registration failed: ${e.toString()}');
       return false;
     }
   }
@@ -272,10 +268,7 @@ class AuthenticationService with ListenableServiceMixin {
 
       print('✅ Sign-in successful for UID: ${firebaseUser.uid}');
 
-      _snackbarService.showSnackbar(
-        message: 'Welcome back!',
-        duration: const Duration(seconds: 2),
-      );
+      NotificationManager().showSuccess('Welcome back!');
 
       return true;
     } on FirebaseAuthException catch (e) {
@@ -284,9 +277,7 @@ class AuthenticationService with ListenableServiceMixin {
       return false;
     } catch (e) {
       print('❌ Sign-in Error: ${e.toString()}');
-      _snackbarService.showSnackbar(
-        message: 'Sign in failed: ${e.toString()}',
-      );
+      NotificationManager().showError('Sign in failed: ${e.toString()}');
       return false;
     }
   }
@@ -297,9 +288,7 @@ class AuthenticationService with ListenableServiceMixin {
       await _auth.signOut();
       _currentUser.value = null;
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Sign out failed: ${e.toString()}',
-      );
+      NotificationManager().showError('Sign out failed: ${e.toString()}');
     }
   }
 
@@ -307,17 +296,13 @@ class AuthenticationService with ListenableServiceMixin {
   Future<bool> resetPassword(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
-      _snackbarService.showSnackbar(
-        message: 'Password reset email sent!',
-      );
+      NotificationManager().showSuccess('Password reset email sent!');
       return true;
     } on FirebaseAuthException catch (e) {
       _handleAuthError(e);
       return false;
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to send reset email: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to send reset email: ${e.toString()}');
       return false;
     }
   }
@@ -327,9 +312,7 @@ class AuthenticationService with ListenableServiceMixin {
     try {
       final user = _auth.currentUser;
       if (user == null) {
-        _snackbarService.showSnackbar(
-          message: 'No user logged in',
-        );
+        NotificationManager().showError('No user logged in');
         return false;
       }
       
@@ -346,17 +329,12 @@ class AuthenticationService with ListenableServiceMixin {
       // Sign out the user
       await signOut();
       
-      _snackbarService.showSnackbar(
-        message: 'Account deactivated successfully. You can reactivate by logging in again.',
-        duration: const Duration(seconds: 5),
-      );
+      NotificationManager().showSuccess('Account deactivated successfully. You can reactivate by logging in again.');
       
       return true;
     } catch (e) {
       print('❌ Failed to deactivate account: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to deactivate account: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to deactivate account: ${e.toString()}');
       return false;
     }
   }
@@ -366,9 +344,7 @@ class AuthenticationService with ListenableServiceMixin {
     try {
       final user = _auth.currentUser;
       if (user == null || user.email == null) {
-        _snackbarService.showSnackbar(
-          message: 'No user logged in',
-        );
+        NotificationManager().showError('No user logged in');
         return false;
       }
       
@@ -380,9 +356,7 @@ class AuthenticationService with ListenableServiceMixin {
         );
         await user.reauthenticateWithCredential(credential);
       } catch (e) {
-        _snackbarService.showSnackbar(
-          message: 'Invalid password. Please try again.',
-        );
+        NotificationManager().showError('Invalid password. Please try again.');
         return false;
       }
       
@@ -407,17 +381,12 @@ class AuthenticationService with ListenableServiceMixin {
       
       _currentUser.value = null;
       
-      _snackbarService.showSnackbar(
-        message: 'Account deleted permanently.',
-        duration: const Duration(seconds: 5),
-      );
+      NotificationManager().showSuccess('Account deleted permanently.');
       
       return true;
     } catch (e) {
       print('❌ Failed to delete account: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to delete account: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to delete account: ${e.toString()}');
       return false;
     }
   }
@@ -447,10 +416,7 @@ class AuthenticationService with ListenableServiceMixin {
               'updatedAt': DateTime.now().toIso8601String(),
             });
         
-        _snackbarService.showSnackbar(
-          message: 'Welcome back! Your account has been reactivated.',
-          duration: const Duration(seconds: 3),
-        );
+        NotificationManager().showSuccess('Welcome back! Your account has been reactivated.');
         
         return true;
       }
@@ -490,7 +456,7 @@ class AuthenticationService with ListenableServiceMixin {
       default:
         message = 'Authentication failed: ${e.message}';
     }
-    _snackbarService.showSnackbar(message: message);
+    NotificationManager().showError(message);
   }
 
   // Role checks

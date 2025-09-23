@@ -2,12 +2,10 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:injectable/injectable.dart';
 import 'package:stacked/stacked.dart';
-import 'package:stacked_services/stacked_services.dart';
-import 'package:get_it/get_it.dart';
+import 'notification_manager.dart';
 
 @lazySingleton
 class ConnectivityService with ListenableServiceMixin {
-  SnackbarService get _snackbarService => GetIt.instance<SnackbarService>();
   final Connectivity _connectivity = Connectivity();
 
   ConnectivityService() {
@@ -35,15 +33,11 @@ class ConnectivityService with ListenableServiceMixin {
       _connectivitySubscription = _connectivity.onConnectivityChanged.listen(
         _updateConnectivityStatus,
         onError: (error) {
-          _snackbarService.showSnackbar(
-            message: 'Connectivity monitoring error: $error',
-          );
+          NotificationManager().showError('Connectivity monitoring error: $error');
         },
       );
     } catch (e) {
-      _snackbarService.showSnackbar(
-        message: 'Failed to initialize connectivity service: $e',
-      );
+      NotificationManager().showError('Failed to initialize connectivity service: $e');
     }
   }
 
@@ -58,15 +52,9 @@ class ConnectivityService with ListenableServiceMixin {
     // Show notification when connectivity changes
     if (wasConnected != isNowConnected) {
       if (isNowConnected) {
-        _snackbarService.showSnackbar(
-          message: '🟢 Internet connection restored',
-          duration: const Duration(seconds: 2),
-        );
+        NotificationManager().showSuccess('🟢 Internet connection restored');
       } else {
-        _snackbarService.showSnackbar(
-          message: '🔴 No internet connection - working offline',
-          duration: const Duration(seconds: 3),
-        );
+        NotificationManager().showWarning('🔴 No internet connection - working offline');
       }
     }
   }

@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import '../../../../services/core/authentication_service.dart';
 import '../../../../services/core/auth_session_service.dart';
 import '../../../../app/app.router.dart';
+import '../../../../services/core/notification_manager.dart';
 
 class LoginViewModel extends BaseViewModel {
   final AuthenticationService _authService = GetIt.instance<AuthenticationService>();
@@ -117,9 +118,7 @@ class LoginViewModel extends BaseViewModel {
 
   // Sign in with Google
   Future<void> signInWithGoogle() async {
-    _snackbarService.showSnackbar(
-      message: 'Google sign-in is not available in this version.',
-    );
+    NotificationManager().showInfo('Google sign-in is not available in this version.');
   }
 
   @override

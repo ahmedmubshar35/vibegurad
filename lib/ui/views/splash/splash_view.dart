@@ -21,11 +21,10 @@ class SplashView extends StackedView<SplashViewModel> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // App Logo
-            Image.asset(
-              'assets/images/App_logo.png',
-              height: 120,
-              width: 120,
-              fit: BoxFit.contain,
+            const Icon(
+              Icons.security,
+              size: 120,
+              color: Colors.white,
             ),
             const SizedBox(height: 24),
             

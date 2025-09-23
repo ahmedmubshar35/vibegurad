@@ -4,6 +4,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/tool/advanced_tool_models.dart';
+import '../core/notification_manager.dart';
 
 @lazySingleton
 class ToolWarrantyService {
@@ -166,17 +167,13 @@ class ToolWarrantyService {
           .collection(_collection)
           .add(warranty.toJson());
 
-      _snackbarService.showSnackbar(
-        message: 'Warranty created successfully!',
-      );
+      NotificationManager().showSuccess('Warranty created successfully!');
       
       print('✅ Warranty created: ${warranty.warrantyId}');
       return true;
     } catch (e) {
       print('❌ Error creating warranty: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to create warranty: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to create warranty: ${e.toString()}');
       return false;
     }
   }
@@ -189,17 +186,13 @@ class ToolWarrantyService {
           .doc(warrantyId)
           .update(warranty.toJson());
 
-      _snackbarService.showSnackbar(
-        message: 'Warranty updated successfully!',
-      );
+      NotificationManager().showSuccess('Warranty updated successfully!');
       
       print('✅ Warranty updated: $warrantyId');
       return true;
     } catch (e) {
       print('❌ Error updating warranty: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to update warranty: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to update warranty: ${e.toString()}');
       return false;
     }
   }
@@ -229,17 +222,13 @@ class ToolWarrantyService {
           .doc(warrantyId)
           .update(updates);
 
-      _snackbarService.showSnackbar(
-        message: 'Warranty extended successfully!',
-      );
+      NotificationManager().showSuccess('Warranty extended successfully!');
       
       print('✅ Warranty extended: $warrantyId');
       return true;
     } catch (e) {
       print('❌ Error extending warranty: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to extend warranty: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to extend warranty: ${e.toString()}');
       return false;
     }
   }
@@ -258,16 +247,12 @@ class ToolWarrantyService {
     try {
       final warranty = await getWarranty(warrantyId);
       if (warranty == null) {
-        _snackbarService.showSnackbar(
-          message: 'Warranty not found',
-        );
+        NotificationManager().showWarning('Warranty not found');
         return false;
       }
 
       if (!warranty.isActive) {
-        _snackbarService.showSnackbar(
-          message: 'Warranty is not active',
-        );
+        NotificationManager().showWarning('Warranty is not active');
         return false;
       }
 
@@ -299,17 +284,13 @@ class ToolWarrantyService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Warranty claim submitted successfully!',
-      );
+      NotificationManager().showSuccess('Warranty claim submitted successfully!');
       
       print('✅ Warranty claim created: ${claim['claimId']}');
       return true;
     } catch (e) {
       print('❌ Error creating warranty claim: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to create warranty claim: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to create warranty claim: ${e.toString()}');
       return false;
     }
   }
@@ -357,17 +338,13 @@ class ToolWarrantyService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Warranty claim status updated!',
-      );
+      NotificationManager().showSuccess('Warranty claim status updated!');
       
       print('✅ Warranty claim updated: $claimId');
       return true;
     } catch (e) {
       print('❌ Error updating claim status: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to update claim status: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to update claim status: ${e.toString()}');
       return false;
     }
   }
@@ -385,17 +362,13 @@ class ToolWarrantyService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Warranty cancelled',
-      );
+      NotificationManager().showInfo('Warranty cancelled');
       
       print('✅ Warranty cancelled: $warrantyId');
       return true;
     } catch (e) {
       print('❌ Error cancelling warranty: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to cancel warranty: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to cancel warranty: ${e.toString()}');
       return false;
     }
   }
@@ -411,17 +384,13 @@ class ToolWarrantyService {
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      _snackbarService.showSnackbar(
-        message: 'Warranty deleted successfully!',
-      );
+      NotificationManager().showSuccess('Warranty deleted successfully!');
       
       print('✅ Warranty deleted (soft): $warrantyId');
       return true;
     } catch (e) {
       print('❌ Error deleting warranty: $e');
-      _snackbarService.showSnackbar(
-        message: 'Failed to delete warranty: ${e.toString()}',
-      );
+      NotificationManager().showError('Failed to delete warranty: ${e.toString()}');
       return false;
     }
   }
